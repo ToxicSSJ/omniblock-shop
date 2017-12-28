@@ -1,0 +1,4 @@
+name: Shop
+main: net.omniblock.shop.ShopPlugin
+softdepend: [OmniNetwork, HolographicDisplays]
+version: 2.5.7
