@@ -79,7 +79,9 @@ public class ShopNPCManager {
 				for (NPCShop shop : registeredNPCs) {
 
 					if (shop.getNpctype() != null) {
-
+						
+						if(shop.getNpctype().getAction() == null) continue;
+						
 						NPCShop.NPCAction action = shop.getNpctype().getAction();
 						action.clickEvent(npc, e.getPlayer());
 					}
