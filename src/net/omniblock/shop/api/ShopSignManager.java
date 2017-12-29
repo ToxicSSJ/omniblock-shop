@@ -20,7 +20,7 @@ public class ShopSignManager {
 
 	protected static List<AbstractShop> registeredShops = new ArrayList<AbstractShop>();
 	
-	public static void setup() {
+	public static void setu() {
 		
 		ShopPlugin.getInstance().getServer().getPluginManager().registerEvents(new ShopSignListener(), ShopPlugin.getInstance());
 		
