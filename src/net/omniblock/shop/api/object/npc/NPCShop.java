@@ -36,7 +36,6 @@ public class NPCShop {
 	 *            Ubicación de la cabeza del NPC.
 	 * 
 	 */
-
 	public NPCShop(NPCShopType type, Location location, float yaw, float pitch) {
 
 		this.type = type;
@@ -55,8 +54,6 @@ public class NPCShop {
 		npc.setName(TextUtil.format(this.type.getName()));
 		npc.data().set(NPC.PLAYER_SKIN_UUID_METADATA, this.type.getSkin());
 
-		makeIA();
-
 	}
 
 	/**
@@ -64,7 +61,6 @@ public class NPCShop {
 	 * Elimina un NPC ya creado.
 	 * 
 	 */
-
 	public NPCShop destroy() {
 
 		if (npc != null)
@@ -80,7 +76,6 @@ public class NPCShop {
 	 * Con este método, creará la inteligencia que tendrá el NPC.
 	 * 
 	 */
-
 	public void makeIA() {
 
 	}
@@ -90,8 +85,6 @@ public class NPCShop {
 	 * Interface donde se realiza la acción del NPC.
 	 * 
 	 */
-
-	
 	public static interface NPCAction {
 		public void clickEvent(NPC npc, Player player);
 	}

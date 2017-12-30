@@ -70,7 +70,6 @@ public enum NPCShopType {
 	 *            Acción que se realizara al hundir click al NPC.
 	 * 
 	 */
-
 	NPCShopType(String name, String professionName, String skin, String[] npcDialogs, Material material,
 			NPCAction action) {
 

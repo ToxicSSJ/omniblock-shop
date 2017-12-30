@@ -13,11 +13,12 @@ public abstract class InventoryShop {
 	protected String inventoryName;
 	protected Player player;
 
-	public static final int emeraldSlot = 4;
-	public static final int paperSlot = 6;
+	protected static final int emeraldSlot = 3;
+	protected static final int optionSlot= 5;
+	protected static final int paperSlot = 7;
 
-	public static final ItemStack buy = new ItemBuilder(Material.EMERALD).name(TextUtil.format("&2Comprar")).amount(1).build();
-	public static final ItemStack sell = new ItemBuilder(Material.PAPER).name(TextUtil.format("&cVender")).amount(1).build();
+	protected static final ItemStack buy = new ItemBuilder(Material.EMERALD).name(TextUtil.format("&2Comprar")).amount(1).build();
+	protected static final ItemStack sell = new ItemBuilder(Material.PAPER).name(TextUtil.format("&cVender")).amount(1).build();
 
 	/**
 	 * Este objeto se utiliza para crear un inventario.
@@ -30,7 +31,6 @@ public abstract class InventoryShop {
 	 *            Nombre del inventario.
 	 * 
 	 */
-
 	public InventoryShop(String npcName, Player player, String inventoryName) {
 
 		this.npcName = npcName;
@@ -43,27 +43,41 @@ public abstract class InventoryShop {
 	 * Crear un inventario a un NPC.
 	 * 
 	 */
-
 	public abstract void makeIventory();
 
 	/**
 	 * Sistema de compra de ítems del NPC.
 	 * 
 	 */
-
-	public abstract void buy();
+	protected abstract void buy();
 
 	/**
 	 * Sistema de venta de items del NPC
 	 * 
 	 */
-
-	public abstract void sell();
+	protected abstract void sell();
 
 	/**
 	 * Colocar más ítem para comprar o alguna opción extra.
 	 * 
 	 */
-
 	public abstract void moreOptions();
+	
+	/**
+	 *	Hacer la compra de algún item
+	 * 
+	 * */
+	protected void makeBuy(int price) {
+		
+		player.sendMessage(TextUtil.format("Gracias por su compra."));
+		
+	}
+	
+	/**
+	 * Hacer la venta de algún item.
+	 * 
+	 * */
+	protected void makeSell() {
+		
+	}
 }

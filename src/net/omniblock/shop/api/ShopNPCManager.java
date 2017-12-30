@@ -21,7 +21,6 @@ public class ShopNPCManager {
 	 * Se preparará toda la tienda de los NPCs.
 	 * 
 	 */
-
 	public static void setup() {
 
 		ShopPlugin.getInstance().getServer().getPluginManager().registerEvents(new ShopNPCListener(),
@@ -38,7 +37,6 @@ public class ShopNPCManager {
 	 *            Se crea un objeto nuevo para ser registrado.
 	 * 
 	 */
-
 	public static void registeredNPCShop(NPCShop shop) {
 		registeredNPCs.add(shop);
 		return;
@@ -53,7 +51,6 @@ public class ShopNPCManager {
 	 *            Se instancia el objeto para eliminarlo.
 	 * 
 	 */
-
 	public static void removeNPCShop(NPCShop shop) {
 		if (registeredNPCs.contains(shop))
 			registeredNPCs.remove(shop);
@@ -66,7 +63,6 @@ public class ShopNPCManager {
 	 * Se registrara todos los eventos de los NPCs.
 	 * 
 	 */
-
 	public static class ShopNPCListener implements Listener {
 
 		@EventHandler
