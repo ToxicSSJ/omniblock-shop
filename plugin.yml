@@ -2,3 +2,8 @@ name: Shop
 main: net.omniblock.shop.ShopPlugin
 softdepend: [OmniNetwork, HolographicDisplays]
 version: 2.5.7
+
+permissions:
+  ShopSign.admin:
+    default: op
+    description: Crear tiendas ADMIN por carteles
