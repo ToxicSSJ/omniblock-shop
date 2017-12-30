@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.omniblock.shop.ShopPlugin;
-import net.omniblock.shop.api.object.NPCShop;
+import net.omniblock.shop.api.object.npc.NPCShop;
 
 public class ShopNPCManager {
 
@@ -77,7 +77,9 @@ public class ShopNPCManager {
 				NPC npc = CitizensAPI.getNPCRegistry().getNPC(e.getRightClicked());
 
 				for (NPCShop shop : registeredNPCs) {
-
+					
+					if(shop.getNpc() != npc) continue; 
+					
 					if (shop.getNpctype() != null) {
 						
 						if(shop.getNpctype().getAction() == null) continue;
