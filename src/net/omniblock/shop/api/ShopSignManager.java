@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -260,11 +261,61 @@ public class ShopSignManager {
 				
 				//
 				// Con el fin de unicamente registrar
-				// los eventos tipo click derecho sobre
-				// el bloque.
+				// los eventos tipo click sobre un
+				// bloque.
 				//
-				if(e.getAction() != Action.RIGHT_CLICK_BLOCK)
+				if(		e.getAction() == Action.RIGHT_CLICK_AIR ||
+						e.getAction() == Action.LEFT_CLICK_AIR ||
+						e.getAction() == Action.PHYSICAL)
 					return;
+				
+				
+				
+				//
+				// Para prevenir que los usuarios puedan abrir
+				// los cofres 
+				//
+				if(e.getClickedBlock().getState() instanceof Chest) {
+					
+					//
+					// Verificar que el cofre que se está
+					// abriendo pertenezca a una tienda.
+					//
+					for(AbstractShop shop : registeredShops) {
+						
+						Block chestBlock = shop.getChest().getBlock();
+						
+						//
+						// En caso de que pertenezca a una tienda verificar
+						// si quien está abriendo el cofre es un usuario
+						// y si lo es, verificar si es el propietario.
+						//
+						if(chestBlock.equals(e.getClickedBlock())) {
+							
+							if(shop instanceof UserShop) {
+								
+								if(((UserShop) shop).getCachePlayer() == null)
+									if(Bukkit.getPlayer(Resolver.getLastNameByNetworkID(shop.getPlayerNetworkID())) != null)
+										((UserShop) shop).setCachePlayer(Bukkit.getPlayer(Resolver.getLastNameByNetworkID((shop.getPlayerNetworkID()))));
+								
+								Player shopOwner = ((UserShop) shop).getCachePlayer();
+								
+								if(e.getPlayer().equals(shopOwner))
+									return;
+								
+								e.setCancelled(true);
+								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda que intentas abrir no es de tu propiedad!"));
+								return;
+							}
+							
+							e.setCancelled(true);
+							return;
+							
+						}
+						
+					}
+					
+				}
 				
 				if(e.getClickedBlock().getState() instanceof Sign) {
 					

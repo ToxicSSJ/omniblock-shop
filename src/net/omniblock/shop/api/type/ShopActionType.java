@@ -4,8 +4,8 @@ import net.omniblock.network.library.utils.TextUtil;
 
 public enum ShopActionType {
 
-	BUY("&a&lCOMPRAR &8(Click)"),
-	SELL("&9&lVENDER &8(Click)"),
+	BUY("&a&lCOMPRAR"),
+	SELL("&9&lVENDER"),
 	
 	;
 	
