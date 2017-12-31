@@ -1,4 +1,4 @@
-package net.omniblock.shop.api.config;
+package net.omniblock.shop.api.config.variables;
 
 import net.omniblock.network.library.utils.TextUtil;
 

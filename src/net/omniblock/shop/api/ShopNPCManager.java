@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.omniblock.shop.ShopPlugin;
-import net.omniblock.shop.api.object.NPCShop;
+import net.omniblock.shop.api.object.npc.NPCShop;
 
 public class ShopNPCManager {
 
@@ -21,7 +21,6 @@ public class ShopNPCManager {
 	 * Se preparará toda la tienda de los NPCs.
 	 * 
 	 */
-
 	public static void setup() {
 
 		ShopPlugin.getInstance().getServer().getPluginManager().registerEvents(new ShopNPCListener(),
@@ -38,7 +37,6 @@ public class ShopNPCManager {
 	 *            Se crea un objeto nuevo para ser registrado.
 	 * 
 	 */
-
 	public static void registeredNPCShop(NPCShop shop) {
 		registeredNPCs.add(shop);
 		return;
@@ -53,7 +51,6 @@ public class ShopNPCManager {
 	 *            Se instancia el objeto para eliminarlo.
 	 * 
 	 */
-
 	public static void removeNPCShop(NPCShop shop) {
 		if (registeredNPCs.contains(shop))
 			registeredNPCs.remove(shop);
@@ -66,7 +63,6 @@ public class ShopNPCManager {
 	 * Se registrara todos los eventos de los NPCs.
 	 * 
 	 */
-
 	public static class ShopNPCListener implements Listener {
 
 		@EventHandler
@@ -77,7 +73,9 @@ public class ShopNPCManager {
 				NPC npc = CitizensAPI.getNPCRegistry().getNPC(e.getRightClicked());
 
 				for (NPCShop shop : registeredNPCs) {
-
+					
+					if(shop.getNpc() != npc) continue; 
+					
 					if (shop.getNpctype() != null) {
 						
 						if(shop.getNpctype().getAction() == null) continue;

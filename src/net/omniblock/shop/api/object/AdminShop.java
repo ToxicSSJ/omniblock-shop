@@ -1,25 +1,28 @@
 package net.omniblock.shop.api.object;
 
-import org.bukkit.block.Sign;
-import org.bukkit.event.player.PlayerInteractEvent;
+import java.util.HashMap;
+import java.util.Map;
 
-import net.omniblock.shop.api.config.LineRegex;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+
+import net.omniblock.shop.api.config.variables.LineRegex;
 import net.omniblock.shop.api.exception.SignRegexException;
 import net.omniblock.shop.api.type.ShopActionType;
 import net.omniblock.shop.api.type.ShopType;
 
 public class AdminShop extends AbstractShop {
 
-	protected Sign sign;
-	
-	protected String materialID = "0";
-	protected String materialSubID = "0";
+	protected ItemStack shopItem;
 	
 	protected boolean savedShop = false;
 	
-	public AdminShop(Sign sign, String playerNetworkID, String uniqueID) {
+	public AdminShop(Sign sign, Chest chest, String uniqueID) {
 		
-		super(sign, ShopType.ADMIN_SHOP, playerNetworkID, uniqueID);
+		super(sign, chest, ShopType.ADMIN_SHOP, 0, "ADMIN", uniqueID);
 		
 		this.sign = sign;
 		return;
@@ -43,8 +46,31 @@ public class AdminShop extends AbstractShop {
 	}
 
 	@Override
+	public void destroySign() {
+		
+	}
+	
+	@Override
 	public void clickEvent(PlayerInteractEvent e) {
 		
+	}
+
+	@Override
+	public ShopLoadStatus loadSign(Player player) {
+		return ShopLoadStatus.CANNOT_LOAD;
+	}
+
+	@SuppressWarnings("serial")
+	@Override
+	public Map<String, Object> getConfigData() {
+		return new HashMap<String, Object>(){{
+			
+			put("usershop." + uniqueID + ".location", sign.getWorld().getName() + "," + sign.getX() + "," + sign.getY() + "," + sign.getZ());
+			put("usershop." + uniqueID + ".shopItem", shopItem);
+			put("usershop." + uniqueID + ".savedShop", savedShop);
+			put("usershop." + uniqueID + ".actionType", actionType);
+			
+		}};
 	}
 	
 }
