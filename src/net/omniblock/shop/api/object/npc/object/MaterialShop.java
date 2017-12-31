@@ -22,10 +22,4 @@ public class MaterialShop extends InventoryShop {
 	public void sell() {
 		
 	}
-
-	@Override
-	public void moreOptions() {
-		
-	}
-
 }

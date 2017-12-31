@@ -24,10 +24,4 @@ public class ArmorShop extends InventoryShop{
 	public void sell() {
 		
 	}
-
-	@Override
-	public void moreOptions() {
-		
-	}
-
 }

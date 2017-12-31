@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.omniblock.network.handlers.Handlers;
 import net.omniblock.network.handlers.network.NetworkManager;
 import net.omniblock.packets.object.external.ServerType;
+import net.omniblock.shop.api.ShopNPCManager;
 import net.omniblock.shop.api.ShopSignManager;
 import net.omniblock.shop.api.object.AbstractShop;
 import net.omniblock.shop.api.object.UserShop;
@@ -30,6 +31,7 @@ public class ShopPlugin extends JavaPlugin {
 		Handlers.LOGGER.sendModuleMessage("Survival", "Se ha inicializado Shop correctamente!");
 		
 		ShopSignManager.setup();
+		ShopNPCManager.setup();
 		
 	}
 	

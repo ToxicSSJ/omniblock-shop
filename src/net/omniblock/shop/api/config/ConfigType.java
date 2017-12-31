@@ -8,6 +8,7 @@ import net.omniblock.network.library.addons.configaddon.object.Config;
 public enum ConfigType {
 
 	SHOPDATA(new Config(ShopPlugin.getInstance(), "data/shopdata.yml")),
+	SHOP_NPC_DATA(new Config(ShopPlugin.getInstance(), "data/shopnpc.yml")),
 
 	;
 

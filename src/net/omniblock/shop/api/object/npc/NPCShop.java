@@ -36,13 +36,10 @@ public class NPCShop {
 	 *            Ubicación de la cabeza del NPC.
 	 * 
 	 */
-	public NPCShop(NPCShopType type, Location location, float yaw, float pitch) {
+	public NPCShop(NPCShopType type, Location location) {
 
 		this.type = type;
 		this.location = location;
-		
-		this.location.setYaw(yaw);
-		this.location.setPitch(pitch);
 		
 		Hologram hologram = HologramsAPI.createHologram(ShopPlugin.getInstance(), this.location.clone().add(0, 3.3, 0));
 		

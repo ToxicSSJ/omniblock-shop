@@ -4,7 +4,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.citizensnpcs.api.npc.NPC;
+import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.shop.api.object.npc.NPCShop.NPCAction;
+import net.omniblock.shop.api.object.npc.object.FoodShop;
+import net.omniblock.shop.api.object.npc.object.BlockShop;
+import net.omniblock.shop.api.object.npc.object.InventoryShop;
 
 public enum NPCShopType {
 
@@ -15,8 +19,7 @@ public enum NPCShopType {
 			"¡Está muy tranquila la ciudad hoy en día!" },
 
 			Material.EMERALD, null),
-
-	SHOP_FOOD("Alex", "PANADERO", " ", new String[] {
+	SHOP_FOOD("&4&lAlex", "&6&lALIMENTOS", " ", new String[] {
 
 			"¡Bienvenido! compre los más ricos panes de la ciudad!",
 			"¡Panes frescos y crujientes solo en este local!" },
@@ -25,11 +28,14 @@ public enum NPCShopType {
 
 				@Override
 				public void clickEvent(NPC npc, Player player) {
+				
+					InventoryShop shop = new FoodShop(player, TextUtil.format("¡Bienvenido!"));
+					shop.makeIventory();
 					
+					return;
 					
 				}
 			}),
-
 	SHOP_MATERIAL("Juan", "HERRERO", " ", new String[] {
 
 			"¡Piedras preciosas a buen precio!", 
@@ -41,7 +47,23 @@ public enum NPCShopType {
 				public void clickEvent(NPC npc, Player player) {
 
 				}
-			});
+			}),
+	SHOP_BLOCK("&4&lPedro", "&6&lCONSTUCTOR", " ", new String[] {
+
+			"", 
+			"" },
+
+			Material.BRICK, new NPCAction() {
+
+				@Override
+				public void clickEvent(NPC npc, Player player) {
+					
+					InventoryShop shop = new BlockShop(player, TextUtil.format("¡Bienvenidos!"));
+					shop.makeIventory();
+					return;
+					
+				}
+			}),
 
 	;
 
@@ -79,7 +101,6 @@ public enum NPCShopType {
 		this.npcDialogs = npcDialogs;
 		this.material = material;
 		this.action = action;
-
 	}
 
 	NPCShopType(String name, String skin, String[] npcDialogs, Material material, NPCAction action) {
