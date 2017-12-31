@@ -138,7 +138,7 @@ public class ShopSignManager {
 						AdminShop userShop = new AdminShop(
 								sign,
 								chest,
-								ShopActionType.valueOf(ConfigType.SHOPDATA.getConfig().getString("adminshop." + uniqueID + ".actionType")),
+								ShopActionType.ADMIN,
 								uniqueID);
 						
 						if(userShop.loadSign(null) == ShopLoadStatus.LOADED)
@@ -534,17 +534,14 @@ public class ShopSignManager {
 			// El cartel en caso de ser tipo Admin funcionará de la siguiente
 			// manera:
 			// 
-			// [TIENDA]             			| Prefijo tienda.
-			// [COMPRAR / VENDER]   			| El tipo de tienda (compra o venta).
+			// [ADMIN]             			| Prefijo tienda.
 			//
-			if(e.getPlayer().hasPermission("shop.shopadmin.admin") && e.getLine(0).equalsIgnoreCase(LineRegex.CREATE_ADMIN_SHOP_UP)){
-				
-				if(e.getLine(1).equalsIgnoreCase(LineRegex.CREATE_BUY_SHOP_MIDDLE) || e.getLine(1).equalsIgnoreCase(LineRegex.CREATE_SELL_SHOP_MIDDLE)) {
+			if(e.getLine(0).equalsIgnoreCase(LineRegex.CREATE_ADMIN_SHOP_UP)){
 					
 					AdminShop shop = new AdminShop(
 							(Sign) e.getBlock().getState(),
 							chest,
-							e.getLine(1).equalsIgnoreCase(LineRegex.CREATE_BUY_SHOP_MIDDLE) ? ShopActionType.BUY : ShopActionType.SELL,
+							ShopActionType.ADMIN,
 							UUID.randomUUID().toString().substring(0, 4));
 					
 					if(shop.loadSign(e.getPlayer()) == ShopLoadStatus.LOADED)
@@ -552,10 +549,7 @@ public class ShopSignManager {
 					
 					return;
 					
-				}
-				
 			}
-			
 			
 		}
 		

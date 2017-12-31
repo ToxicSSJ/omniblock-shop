@@ -17,15 +17,13 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.ItemLine;
 
-import net.omniblock.network.handlers.base.sql.util.Resolver;
 import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.packets.util.Lists;
 import net.omniblock.shop.ShopPlugin;
+import net.omniblock.shop.api.ShopSignManager;
 import net.omniblock.shop.api.config.ConfigType;
 import net.omniblock.shop.api.config.variables.ItemsProtocol;
-import net.omniblock.shop.api.config.variables.LineRegex;
 import net.omniblock.shop.api.exception.SignLoadException;
-import net.omniblock.shop.api.exception.SignRegexException;
 import net.omniblock.shop.api.type.AdminShopItem;
 import net.omniblock.shop.api.type.ShopActionType;
 import net.omniblock.shop.api.type.ShopType;
@@ -56,23 +54,30 @@ public class AdminShop extends AbstractShop {
 		
 	}
 
-	@Override
 	public void saveSign() {
 		
-		if(!this.sign.getLine(0).equalsIgnoreCase(LineRegex.CREATE_ADMIN_SHOP_UP))
-			throw new SignRegexException(
-					"El cartel ubicado en " +
-					sign.getWorld().getName() + "," + sign.getX() + "," + sign.getY() + "," + sign.getZ() + " no " +
-					"tiene el prefix de la tienda tipo administrador!");
+		for(Map.Entry<String, Object> entry : getConfigData().entrySet())
+			ConfigType.SHOPDATA.getConfig().set(entry.getKey(), entry.getValue());
 		
-		this.savedShop = true;
-		
+		ConfigType.SHOPDATA.getConfigObject().save();
 		return;
 		
 	}
 
 	@Override
 	public void destroySign() {
+	
+		destroyed = true;
+		ShopSignManager.removeShop(this);
+		
+		if(hologram != null)
+			hologram.delete();
+		
+		if(ConfigType.SHOPDATA.getConfig().isSet("adminshop." + uniqueID))
+			ConfigType.SHOPDATA.getConfig().set("adminshop." + uniqueID, null);
+		
+		ConfigType.SHOPDATA.getConfigObject().save();
+		return;
 		
 	}
 	
@@ -154,6 +159,7 @@ public class AdminShop extends AbstractShop {
 				}
 				
 				shopItem = e.getPlayer().getItemInHand();
+				shopItem.setAmount(1);
 				status = AdminShopStatus.CREATED;
 				
 				hologram = HologramsAPI.createHologram(ShopPlugin.getInstance(), chest.getLocation().clone().add(.5, 1.8, .5));
@@ -165,7 +171,8 @@ public class AdminShop extends AbstractShop {
 				int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
 				String sell = "&aV: &0&l$&0" + sellPrice;
 				
-				sign.setLine(0, TextUtil.format("&c&lADMIN&eSHOP"));
+				
+				sign.setLine(0, actionType.getFormattedAction());
 				sign.setLine(1, TextUtil.format("&n" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased()));
 				sign.setLine(2, TextUtil.format(buy));
 				sign.setLine(3, TextUtil.format(sell));
@@ -180,17 +187,11 @@ public class AdminShop extends AbstractShop {
 				
 			}
 			
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda a la que intentas acceder se encuentra en construcción...")); 
+			return;
 			
 		}else{
 			
-			if(cachePlayer.equals(e.getPlayer()) || Resolver.getNetworkIDByName(e.getPlayer().getName()).equals(this.getPlayerNetworkID())) {
-				
-				cachePlayer = e.getPlayer();
-				
-				e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No puedes &cutilizar&7 tus propias tiendas.")); 
-				return;
-				
-			}
 			
 			boolean isSneaking = e.getPlayer().isSneaking();
 			int money = SurvivalBankBase.getMoney(e.getPlayer());
@@ -202,29 +203,28 @@ public class AdminShop extends AbstractShop {
 				if(isSneaking){
 					
 					buyPrice *= 64;
+					shopItem.setAmount(64);
 					
 					if(money>=buyPrice){
 						
 						if(e.getPlayer().getInventory().firstEmpty() == -1){
 							
-							e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7 No tienes espacio");
+							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7 No tienes espacio"));
 							
 						}
 						else{
-							
-							money -= buyPrice;
-							SurvivalBankBase.setMoney(e.getPlayer(), money);
-							shopItem.setAmount(64);
+
+							SurvivalBankBase.removeMoney(e.getPlayer(), buyPrice);
 							e.getPlayer().getInventory().addItem(shopItem);
-							e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
-									+shopItem.getItemMeta().getDisplayName()+" &7por &a$"+buyPrice);
+							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
+									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+buyPrice));
 							
 						}
 						
 						return;
 					}
 					
-					e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7No posees suficiente dinero.");
+					e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No posees suficiente dinero."));
 					return;
 					
 				}else{
@@ -233,27 +233,30 @@ public class AdminShop extends AbstractShop {
 						
 						if(e.getPlayer().getInventory().firstEmpty() == -1){
 							
-							e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7 No tienes espacio");
+							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7 No tienes espacio"));
 							
 						}
 						else{
-
-							money -= buyPrice;
-							SurvivalBankBase.setMoney(e.getPlayer(), money);
+							
+							shopItem.setAmount(1);
+							SurvivalBankBase.removeMoney(e.getPlayer(), buyPrice);
+							shopItem.setAmount(1);
 							e.getPlayer().getInventory().addItem(shopItem);
-							e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
-									+shopItem.getItemMeta().getDisplayName()+" &7por &a$"+buyPrice);
+							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
+									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+buyPrice));
 							
 						}
 						return;
 					}
 					
-					e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7No posees suficiente dinero.");
+					e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No posees suficiente dinero."));
 					return;
 					
 				}
 			}
 			else if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+				
+				isSneaking = e.getPlayer().isSneaking();
 				
 				int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
 				
@@ -265,31 +268,49 @@ public class AdminShop extends AbstractShop {
 					
 					for(ItemStack item2Sell : inventory){
 						
-						if(item2Sell.isSimilar(shopItem) && item2Sell.getAmount() <= shopItem.getAmount()){
-							e.getPlayer().getInventory().remove(shopItem);
-							SurvivalBankBase.setMoney(e.getPlayer(), sellPrice);
-							e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
-									+shopItem.getItemMeta().getDisplayName()+" &7por &a$"+sellPrice);
+						if(item2Sell == null) continue;
+						
+						if(!shopItem.getType().equals(item2Sell.getType()))
+							continue;
+							
+						if(item2Sell.getAmount() >= shopItem.getAmount()){
+								
+							SurvivalBankBase.addMoney(e.getPlayer(), sellPrice);
+							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
+									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+sellPrice));
+							e.getPlayer().getInventory().removeItem(shopItem);
+							shopItem.setAmount(1);
+								
+							return;
+								
+						}else{
+							e.getPlayer().sendMessage("vender lo maximo que tengas"); //trabajando..
 						}
 						
 					}
-					e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7No tienes este item para vender.");
+					e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No tienes suficiente de este item para vender."));
+					return;
 					
 				}else{
 					
+					shopItem.setAmount(1);
 					ItemStack[] inventory = e.getPlayer().getInventory().getContents();
 					
 					for(ItemStack item2Sell : inventory){
 						
-						if(item2Sell.isSimilar(shopItem)){
-							e.getPlayer().getInventory().remove(shopItem);
-							SurvivalBankBase.setMoney(e.getPlayer(), sellPrice);
-							e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
-									+shopItem.getItemMeta().getDisplayName()+" &7por &a$"+sellPrice);
+						if(item2Sell == null) continue;
+						
+						if(item2Sell.getType().equals(shopItem.getType())){
+							e.getPlayer().getInventory().removeItem(shopItem);
+							SurvivalBankBase.addMoney(e.getPlayer(), sellPrice);
+							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
+									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+sellPrice));
+							return;
 						}
 						
 					}
-					e.getPlayer().sendMessage("&c&lAdmin&eShop &b&l» &7No tienes este item para vender.");
+					e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No tienes este item para vender."));
+					return;
 					
 				}
 			}
@@ -333,7 +354,7 @@ public class AdminShop extends AbstractShop {
 			int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
 			String sell = "&aV: &0&l$&0" + sellPrice;
 			
-			sign.setLine(0, TextUtil.format("&c&lADMIN&eSHOP"));
+			sign.setLine(0, actionType.getFormattedAction());
 			sign.setLine(1, TextUtil.format("&n" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased()));
 			sign.setLine(2, TextUtil.format(buy));
 			sign.setLine(3, TextUtil.format(sell));
@@ -369,10 +390,11 @@ public class AdminShop extends AbstractShop {
 	public Map<String, Object> getConfigData() {
 		return new HashMap<String, Object>(){{
 			
-			put("usershop." + uniqueID + ".location", sign.getWorld().getName() + "," + sign.getX() + "," + sign.getY() + "," + sign.getZ());
-			put("usershop." + uniqueID + ".shopItem", shopItem);
-			put("usershop." + uniqueID + ".savedShop", savedShop);
-			put("usershop." + uniqueID + ".actionType", actionType);
+			put("adminshop." + uniqueID + ".location", sign.getWorld().getName() + "," + sign.getX() + "," + sign.getY() + "," + sign.getZ());
+			put("adminshop." + uniqueID + ".shopItem", shopItem);
+			put("adminshop." + uniqueID + ".savedShop", savedShop);
+			put("adminshop." + uniqueID + ".status", status.name());
+			put("adminshop." + uniqueID + ".actionType", actionType.name());
 			
 		}};
 	}
