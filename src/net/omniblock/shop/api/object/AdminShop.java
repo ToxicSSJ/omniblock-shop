@@ -42,9 +42,9 @@ public class AdminShop extends AbstractShop {
 	
 	public static List<Player> waitlistPlayers = Lists.newArrayList();
 	
-	public AdminShop(Sign sign, Chest chest, String uniqueID) {
+	public AdminShop(Sign sign, Chest chest, ShopActionType actionType, String uniqueID) {
 		
-		super(sign, chest, ShopType.ADMIN_SHOP, 0, "ADMIN", uniqueID);
+		super(sign, chest, ShopType.ADMIN_SHOP, actionType, 0, "ADMIN", uniqueID);
 		
 		this.sign = sign;
 		return;
@@ -60,7 +60,6 @@ public class AdminShop extends AbstractShop {
 					sign.getWorld().getName() + "," + sign.getX() + "," + sign.getY() + "," + sign.getZ() + " no " +
 					"tiene el prefix de la tienda tipo administrador!");
 		
-		this.setShopActionType(ShopActionType.getByMiddleLine(this.sign.getLine(1)));
 		this.savedShop = true;
 		
 		return;

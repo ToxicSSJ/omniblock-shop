@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Omniblock-Packets"/>
 	<classpathentry kind="lib" path="C:/Gitlab/Citizens.jar"/>
 	<classpathentry kind="lib" path="C:/Gitlab/HolographicDisplays.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Omniblock-Survival"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

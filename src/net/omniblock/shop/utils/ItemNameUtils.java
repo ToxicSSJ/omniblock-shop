@@ -8,6 +8,7 @@ import org.bukkit.Material;
 
 public enum ItemNameUtils {
    
+	UNKNOW("item"),
     ACACIA_DOOR("acacia door"),
     ACACIA_DOOR_ITEM("acacia door"),
     ACACIA_FENCE("acacia fence"),
@@ -490,7 +491,7 @@ public enum ItemNameUtils {
         return name;
     }
     
-    public static String getMaterialName(Material material){
+    public static ItemNameUtils getMaterialName(Material material){
     	
     	if(lookup.size() <= 0)
     		for(ItemNameUtils itemName : values())
@@ -499,9 +500,9 @@ public enum ItemNameUtils {
         ItemNameUtils result = lookup.get(material.name());
         
         if(result == null)
-        	return material.name();
+        	result = ItemNameUtils.UNKNOW;
         
-        return result.toString();
+        return result;
     }
    
     public String firstUpperCased(){

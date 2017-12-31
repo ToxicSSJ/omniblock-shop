@@ -27,7 +27,9 @@ import net.omniblock.shop.api.config.variables.ItemsProtocol;
 import net.omniblock.shop.api.exception.SignLoadException;
 import net.omniblock.shop.api.type.ShopActionType;
 import net.omniblock.shop.api.type.ShopType;
+import net.omniblock.shop.utils.InventoryUtils;
 import net.omniblock.shop.utils.ItemNameUtils;
+import net.omniblock.survival.base.SurvivalBankBase;
 
 public class UserShop extends AbstractShop {
 	
@@ -44,9 +46,9 @@ public class UserShop extends AbstractShop {
 	protected boolean destroyed = false;
 	protected boolean savedShop = false;
 	
-	public UserShop(Sign sign, Chest chest, int price, String playerNetworkID, String uniqueID) {
+	public UserShop(Sign sign, Chest chest, ShopActionType actionType, int price, String playerNetworkID, String uniqueID) {
 		
-		super(sign, chest, ShopType.PLAYER_SHOP, price, playerNetworkID, uniqueID);
+		super(sign, chest, ShopType.PLAYER_SHOP, actionType, price, playerNetworkID, uniqueID);
 		
 		this.sign = sign;
 		return;
@@ -68,8 +70,6 @@ public class UserShop extends AbstractShop {
 			if(!ConfigType.SHOPDATA.getConfig().isSet("usershop." + uniqueID + ".status"))
 				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el status en la configuración.");
 			
-			
-			shopItem = ConfigType.SHOPDATA.getConfig().getItemStack("usershop." + uniqueID + ".shopItem");
 			shopItem = ConfigType.SHOPDATA.getConfig().getItemStack("usershop." + uniqueID + ".shopItem");
 			actionType = ShopActionType.valueOf(ConfigType.SHOPDATA.getConfig().getString("usershop." + uniqueID + ".actionType"));
 			status = UserShopStatus.valueOf(ConfigType.SHOPDATA.getConfig().getString("usershop." + uniqueID + ".status"));
@@ -86,8 +86,8 @@ public class UserShop extends AbstractShop {
 			
 			sign.setLine(0, actionType.getFormattedAction());
 			sign.setLine(1, Resolver.getLastNameByNetworkID(playerNetworkID));
-			sign.setLine(2, TextUtil.format("&8" + ItemNameUtils.getMaterialName(shopItem.getType())));
-			sign.setLine(3, TextUtil.format(actionType == ShopActionType.BUY ? "&a&l$&a" + price : "&6&l$&6" + price));
+			sign.setLine(2, TextUtil.format("&n" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased()));
+			sign.setLine(3, TextUtil.format("&l$&r" + price));
 			sign.update(true);
 			return ShopLoadStatus.LOADED;
 			
@@ -105,7 +105,23 @@ public class UserShop extends AbstractShop {
 			return ShopLoadStatus.CANNOT_LOAD;
 		}
 		
-		this.setShopActionType(ShopActionType.getByMiddleLine(this.sign.getLine(1)));
+		if(ConfigType.SHOPDATA.getConfig().isSet("usershops-amounts." + playerNetworkID))
+			if(ConfigType.SHOPDATA.getConfig().getInt("usershops-amounts." + playerNetworkID) + 1 > ShopSignManager.getMaxShopsByRank(player)) {
+				
+				this.sign.getBlock().breakNaturally();
+				
+				if(ShopSignManager.getMaxShopsByRank(player) >= 500) {
+					
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLo sentimos, has alcanzado el limite maximo de tiendas permitidas!")); 
+					return ShopLoadStatus.CANNOT_LOAD;
+					
+				}
+					
+				player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has alcanzado tu &climite maximo&7 de tiendas, Con un rango &6&lVIP &7podrás incrementar este limite!")); 
+				return ShopLoadStatus.CANNOT_LOAD;
+				
+			}
+				
 		
 		this.cachePlayer = player;
 		this.shopItem = player.getItemInHand();
@@ -201,7 +217,7 @@ public class UserShop extends AbstractShop {
 		
 		if(status == UserShopStatus.WAITING_ITEM) {
 			
-			if(waitlistPlayers.contains(e.getPlayer())) {
+			if(waitlistPlayers.contains(e.getPlayer()) && e.getPlayer().equals(cachePlayer)) {
 				
 				Player player = e.getPlayer();
 				
@@ -223,12 +239,18 @@ public class UserShop extends AbstractShop {
 				
 				sign.setLine(0, actionType.getFormattedAction());
 				sign.setLine(1, Resolver.getLastNameByNetworkID(playerNetworkID));
-				sign.setLine(2, TextUtil.format("&8" + ItemNameUtils.getMaterialName(shopItem.getType())));
-				sign.setLine(3, TextUtil.format(actionType == ShopActionType.BUY ? "&a&l$&a" + price : "&6&l$&6" + price));
+				sign.setLine(2, TextUtil.format("&n" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased()));
+				sign.setLine(3, TextUtil.format("&l$&r" + price));
 				sign.update(true);
 				this.saveSign();
 				
 				waitlistPlayers.remove(e.getPlayer());
+				
+				if(!ConfigType.SHOPDATA.getConfig().isSet("usershops-amounts"))
+					ConfigType.SHOPDATA.getConfig().set("usershops-amounts." + playerNetworkID, 0);
+				
+				ConfigType.SHOPDATA.getConfig().set("usershops-amounts." + playerNetworkID, ConfigType.SHOPDATA.getConfig().getInt("usershops-amounts." + playerNetworkID) + 1);
+				ConfigType.SHOPDATA.getConfigObject().save();
 				
 				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas creado una tienda correctamente!"));
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
@@ -236,12 +258,75 @@ public class UserShop extends AbstractShop {
 				
 			}
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda a la que intentas acceder se encuentra en construcción.")); 
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda a la que intentas acceder se encuentra en construcción...")); 
 			return;
 			
 		}
 		
-		e.getPlayer().sendMessage("Procesando compra :v");
+		if(cachePlayer.equals(e.getPlayer()) || Resolver.getNetworkIDByName(e.getPlayer().getName()).equals(this.getPlayerNetworkID())) {
+			
+			cachePlayer = e.getPlayer();
+			
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No puedes &cutilizar&7 tus propias tiendas.")); 
+			return;
+			
+		}
+		
+		boolean isSneaking = e.getPlayer().isSneaking();
+		
+		if(actionType == ShopActionType.BUY) {
+			
+			int money = SurvivalBankBase.getMoney(e.getPlayer());
+			
+			if(isSneaking) {
+				
+				int avaiableAmount = InventoryUtils.countMatches(chest.getInventory(), shopItem);
+				
+				int purchasableAmount = avaiableAmount > 64 ? 64 : avaiableAmount;
+				int purchasablePrice = purchasableAmount * price;
+				
+				if(purchasablePrice <= 0) {
+					
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7La tienda se ha quedado sin &8stock&7 de este item!"));
+					return;
+					
+				}
+				
+				if(money < purchasablePrice) {
+					
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Te hacen falta &c$" + (purchasablePrice - money) + " &7para poder comprar en esta tienda!")); 
+					return;
+				
+				}
+				
+				if(!chest.getInventory().containsAtLeast(shopItem, isSneaking ? 64 : 1)) {
+					
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7La tienda se ha quedado sin &8stock&7 de este item!")); 
+					return;
+					
+				}
+				
+				return;
+				
+			}
+			
+			if(money < (isSneaking ? price * 64 : price)) {
+				
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Te hacen falta &c$" + ((isSneaking ? price * 64 : price) - money) + " &7para poder comprar en esta tienda!")); 
+				return;
+			
+			}
+			
+			if(!chest.getInventory().containsAtLeast(shopItem, isSneaking ? 64 : 1)) {
+				
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7La tienda se ha quedado sin &8stock&7 de este item!")); 
+				return;
+				
+			}
+			
+			return;
+			
+		}
 		
 	}
 
