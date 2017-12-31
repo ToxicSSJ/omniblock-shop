@@ -326,4 +326,22 @@ public enum AdminShopItem {
 	public void setMaterial(Material material) {
 		this.material = material;
 	}
+	
+	public static int getBuyPriceByMaterial (Material material){
+			for(AdminShopItem asi : AdminShopItem.values()){
+				if(asi.getMaterial().equals(material)){
+					return asi.getPriceBuy();
+				}
+			}
+			return 0;
+	}
+	
+	public static int getSellPriceByMaterial (Material material){
+		for(AdminShopItem asi : AdminShopItem.values()){
+			if(asi.getMaterial().equals(material)){
+				return asi.getPriceSell();
+			}
+		}
+		return 0;
+}
 }
