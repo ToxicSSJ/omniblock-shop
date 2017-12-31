@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -80,7 +81,7 @@ public class AdminShop extends AbstractShop {
 		
 		sign.setLine(1, TextUtil.format("Has click con el"));
 		sign.setLine(2, TextUtil.format("tipo de item que"));
-		sign.setLine(3, TextUtil.format(actionType == ShopActionType.BUY ? "venderás" : "comprarás") + ".");
+		sign.setLine(3, TextUtil.format("negociaras."));
 		
 		player.sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Ahora debes hacer click derecho con el item que usarás en la tienda."));
 		
@@ -158,19 +159,16 @@ public class AdminShop extends AbstractShop {
 				hologram = HologramsAPI.createHologram(ShopPlugin.getInstance(), chest.getLocation().clone().add(.5, 1.8, .5));
 				itemLine = hologram.appendItemLine(shopItem);
 				
-				String third ="";
-				if(actionType == ShopActionType.BUY){
-					price = AdminShopItem.getBuyPriceByMaterial(shopItem.getType());
-					third = "&a&l$&a" + price;
-				}else{
-					AdminShopItem.getSellPriceByMaterial(shopItem.getType());
-					third = "&6&l$&6" + price;
-				}
+				int buyPrice = AdminShopItem.getBuyPriceByMaterial(shopItem.getType());
+				String buy = "&9C: &0&l$&0" + buyPrice;
 				
-				sign.setLine(0, actionType.getFormattedAction());
-				sign.setLine(1, Resolver.getLastNameByNetworkID(playerNetworkID));
-				sign.setLine(2, TextUtil.format("&8" + ItemNameUtils.getMaterialName(shopItem.getType())));
-				sign.setLine(3, TextUtil.format(third));
+				int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
+				String sell = "&aV: &0&l$&0" + sellPrice;
+				
+				sign.setLine(0, TextUtil.format("&c&lADMIN&eSHOP"));
+				sign.setLine(1, TextUtil.format("&n" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased()));
+				sign.setLine(2, TextUtil.format(buy));
+				sign.setLine(3, TextUtil.format(sell));
 				sign.update(true);
 				this.saveSign();
 				
@@ -197,7 +195,7 @@ public class AdminShop extends AbstractShop {
 			boolean isSneaking = e.getPlayer().isSneaking();
 			int money = SurvivalBankBase.getMoney(e.getPlayer());
 			
-			if(actionType == ShopActionType.BUY) {
+			if(e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
 				
 				int buyPrice = AdminShopItem.getBuyPriceByMaterial(shopItem.getType());
 				
@@ -255,7 +253,7 @@ public class AdminShop extends AbstractShop {
 					
 				}
 			}
-			else if(actionType == ShopActionType.SELL){
+			else if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
 				
 				int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
 				
@@ -329,19 +327,16 @@ public class AdminShop extends AbstractShop {
 				
 			}
 			
-			String third ="";
-			if(actionType == ShopActionType.BUY){
-				price = AdminShopItem.getBuyPriceByMaterial(shopItem.getType());
-				third = "&a&l$&a" + price;
-			}else{
-				AdminShopItem.getSellPriceByMaterial(shopItem.getType());
-				third = "&6&l$&6" + price;
-			}
+			int buyPrice = AdminShopItem.getBuyPriceByMaterial(shopItem.getType());
+			String buy = "&9C: &0&l$&0" + buyPrice;
 			
-			sign.setLine(0, actionType.getFormattedAction());
-			sign.setLine(1, Resolver.getLastNameByNetworkID(playerNetworkID));
-			sign.setLine(2, TextUtil.format("&n" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased()));
-			sign.setLine(3, TextUtil.format(third));
+			int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
+			String sell = "&aV: &0&l$&0" + sellPrice;
+			
+			sign.setLine(0, TextUtil.format("&c&lADMIN&eSHOP"));
+			sign.setLine(1, TextUtil.format("&n" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased()));
+			sign.setLine(2, TextUtil.format(buy));
+			sign.setLine(3, TextUtil.format(sell));
 			sign.update(true);
 			return ShopLoadStatus.LOADED;
 			
