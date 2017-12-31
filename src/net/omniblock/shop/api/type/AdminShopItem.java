@@ -327,18 +327,18 @@ public enum AdminShopItem {
 		this.material = material;
 	}
 	
-	public static int getBuyPriceByMaterial (Material material){
+	public static int getBuyPriceByMaterial (Material materia){
 			for(AdminShopItem asi : AdminShopItem.values()){
-				if(asi.getMaterial().equals(material)){
+				if(asi.getMaterial().equals(materia)){
 					return asi.getPriceBuy();
 				}
 			}
 			return 0;
 	}
 	
-	public static int getSellPriceByMaterial (Material material){
+	public static int getSellPriceByMaterial (Material materia){
 		for(AdminShopItem asi : AdminShopItem.values()){
-			if(asi.getMaterial().equals(material)){
+			if(asi.getMaterial().equals(materia)){
 				return asi.getPriceSell();
 			}
 		}

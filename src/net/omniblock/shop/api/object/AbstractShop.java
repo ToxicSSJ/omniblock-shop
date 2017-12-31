@@ -34,12 +34,13 @@ public abstract class AbstractShop {
 	protected String uniqueID;
 	protected String playerNetworkID;
 	
-	public AbstractShop(Sign sign, Chest chest, ShopType type, int price, String playerNetworkID, String uniqueID) {
+	public AbstractShop(Sign sign, Chest chest, ShopType type, ShopActionType actionType, int price, String playerNetworkID, String uniqueID) {
 		
 		this.sign = sign;
 		this.chest = chest;
 		this.type = type;
 		this.price = price;
+		this.actionType = actionType;
 		
 		this.uniqueID = uniqueID;
 		this.playerNetworkID = playerNetworkID;
@@ -65,6 +66,10 @@ public abstract class AbstractShop {
 	
 	public abstract void clickEvent(PlayerInteractEvent e);
 	
+	public Chest getChest() {
+		return chest;
+	}
+	
 	public Sign getSign() {
 		return sign;
 	}
@@ -73,16 +78,16 @@ public abstract class AbstractShop {
 		return sign.getBlock();
 	}
 	
+	public String getUniqueID() {
+		return uniqueID;
+	}
+	
 	public String getPlayerNetworkID() {
 		return playerNetworkID;
 	}
 	
 	public ShopType getShopType() {
 		return type;
-	}
-	
-	public void setShopActionType(ShopActionType actionType) {
-		this.actionType = actionType;
 	}
 	
 	public ShopActionType getShopActionType() {

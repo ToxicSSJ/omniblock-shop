@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Hopper;
 import org.bukkit.block.Sign;
 
 /**
@@ -33,6 +34,21 @@ public class TileUtils {
 		BlockFace attachedFace = signMaterial.getAttachedFace();
 		
 		Block chestBlock = sign.getBlock().getRelative(attachedFace);
+		
+		if(chestBlock.getType() == Material.CHEST)
+			if(chestBlock.getState() instanceof Chest)
+				return (Chest) chestBlock.getState();
+		
+		return null;
+		
+	}
+	
+	public static Chest getChestByHopper(Hopper hopper) {
+		
+		org.bukkit.material.Hopper hopperMaterial = (org.bukkit.material.Hopper) hopper.getData();
+		BlockFace attachedFace = hopperMaterial.getFacing();
+		
+		Block chestBlock = hopper.getBlock().getRelative(attachedFace);
 		
 		if(chestBlock.getType() == Material.CHEST)
 			if(chestBlock.getState() instanceof Chest)
