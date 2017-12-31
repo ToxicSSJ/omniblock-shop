@@ -6,6 +6,8 @@ import net.omniblock.network.handlers.Handlers;
 import net.omniblock.network.handlers.network.NetworkManager;
 import net.omniblock.packets.object.external.ServerType;
 import net.omniblock.shop.api.ShopSignManager;
+import net.omniblock.shop.api.object.AbstractShop;
+import net.omniblock.shop.api.object.UserShop;
 
 public class ShopPlugin extends JavaPlugin {
 
@@ -28,6 +30,16 @@ public class ShopPlugin extends JavaPlugin {
 		Handlers.LOGGER.sendModuleMessage("Survival", "Se ha inicializado Shop correctamente!");
 		
 		ShopSignManager.setup();
+		
+	}
+	
+	@Override
+	public void onDisable() {
+		
+		for(AbstractShop shop : ShopSignManager.getShops())
+			if(shop instanceof UserShop)
+				if(((UserShop) shop).getHologram() != null)
+					((UserShop) shop).getHologram().delete();
 		
 	}
 	

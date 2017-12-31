@@ -124,6 +124,9 @@ public class UserShop extends AbstractShop {
 		destroyed = true;
 		ShopSignManager.removeShop(this);
 		
+		if(hologram != null)
+			hologram.delete();
+		
 		if(ConfigType.SHOPDATA.getConfig().isSet("usershop." + uniqueID))
 			ConfigType.SHOPDATA.getConfig().set("usershop." + uniqueID, null);
 		
@@ -258,6 +261,10 @@ public class UserShop extends AbstractShop {
 		}};
 	}
 
+	public Hologram getHologram() {
+		return hologram;
+	}
+	
 	public static enum UserShopStatus {
 		
 		WAITING_ITEM,

@@ -73,6 +73,10 @@ public abstract class AbstractShop {
 		return sign.getBlock();
 	}
 	
+	public String getPlayerNetworkID() {
+		return playerNetworkID;
+	}
+	
 	public ShopType getShopType() {
 		return type;
 	}

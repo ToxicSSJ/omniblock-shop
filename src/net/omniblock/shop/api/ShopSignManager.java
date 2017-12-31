@@ -164,6 +164,20 @@ public class ShopSignManager {
 	
 	/**
 	 * 
+	 * Recibir todas las tiendas registradas
+	 * por el sistema.
+	 * 
+	 * @return Una lista con todas las tiendas
+	 * que han sido registradas.
+	 */
+	public static List<AbstractShop> getShops() {
+		
+		return registeredShops;
+		
+	}
+	
+	/**
+	 * 
 	 * Esta clase es la encargada de
 	 * ejecutar las acciones de los
 	 * carteles registrados.
@@ -245,11 +259,8 @@ public class ShopSignManager {
 							
 						}
 						
-						if(e.getPlayer().hasPermission("shop.usershop.break")) {
-							
-							
-							
-						}
+						if(Resolver.getLastNameByNetworkID(shop.getPlayerNetworkID()) != e.getPlayer().getName())
+							e.setCancelled(true);
 						
 						return;
 						

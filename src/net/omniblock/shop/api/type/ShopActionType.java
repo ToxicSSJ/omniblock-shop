@@ -22,8 +22,7 @@ public enum ShopActionType {
 	
 	public static ShopActionType getByMiddleLine(String middle) {
 		
-		if(	   middle.equalsIgnoreCase(LineRegex.CREATE_BUY_SHOP_MIDDLE) 
-			|| middle.equalsIgnoreCase(LineRegex.USE_BUY_SHOP_UP))
+		if(middle.equalsIgnoreCase(LineRegex.CREATE_BUY_SHOP_MIDDLE))
 			return ShopActionType.BUY;
 		
 		return ShopActionType.SELL;

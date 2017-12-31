@@ -1,7 +1,13 @@
 package net.omniblock.shop.api.config.variables;
 
-import net.omniblock.network.library.utils.TextUtil;
-
+/**
+ * 
+ * Clase para almacenar variables estaticas
+ * que no estén sujetas a nuevos cambios.
+ * 
+ * @author zlToxicNetherlz
+ *
+ */
 public class LineRegex {
 
 	public static final int USER_MAX_SHOPS = 80;
@@ -11,8 +17,5 @@ public class LineRegex {
 	
 	public static final String CREATE_BUY_SHOP_MIDDLE = "[comprar]";
 	public static final String CREATE_SELL_SHOP_MIDDLE = "[vender]";
-	
-	public static final String USE_BUY_SHOP_UP = TextUtil.format("&a&lCOMPRAR");
-	public static final String USE_SELL_SHOP_UP = TextUtil.format("&c&lVENDER");
 	
 }
