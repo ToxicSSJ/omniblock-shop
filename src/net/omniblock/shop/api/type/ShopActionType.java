@@ -4,7 +4,7 @@ import net.omniblock.network.library.utils.TextUtil;
 
 public enum ShopActionType {
 
-	ADMIN("&c&lADMIN&eSHOP"),
+	ADMIN("&c&lTIENDA"),
 	BUY("&a&lCOMPRAR"),
 	SELL("&9&lVENDER"),
 	

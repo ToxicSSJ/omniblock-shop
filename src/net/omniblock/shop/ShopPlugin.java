@@ -9,6 +9,7 @@ import net.omniblock.shop.api.ShopNPCManager;
 import net.omniblock.shop.api.ShopSignManager;
 import net.omniblock.shop.api.object.AbstractShop;
 import net.omniblock.shop.api.object.UserShop;
+import net.omniblock.shop.api.object.npc.NPCShop;
 
 public class ShopPlugin extends JavaPlugin {
 
@@ -42,6 +43,9 @@ public class ShopPlugin extends JavaPlugin {
 			if(shop instanceof UserShop)
 				if(((UserShop) shop).getHologram() != null)
 					((UserShop) shop).getHologram().delete();
+		
+		for(NPCShop shop : ShopNPCManager.getShops())
+			shop.unloadNPC();
 		
 	}
 	

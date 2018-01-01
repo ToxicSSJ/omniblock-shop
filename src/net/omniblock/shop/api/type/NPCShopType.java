@@ -113,6 +113,17 @@ public enum NPCShopType {
 
 	}
 
+	public static NPCShopType getTypeByName(String name) {
+		
+		try {
+			
+			NPCShopType type = valueOf(name);
+			return type;
+			
+		} catch(Exception e) { return null; }
+		
+	}
+	
 	public String getName() {
 		return name;
 	}

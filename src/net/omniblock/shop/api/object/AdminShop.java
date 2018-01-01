@@ -88,7 +88,7 @@ public class AdminShop extends AbstractShop {
 		sign.setLine(2, TextUtil.format("tipo de item que"));
 		sign.setLine(3, TextUtil.format("negociaras."));
 		
-		player.sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Ahora debes hacer click derecho con el item que usarás en la tienda."));
+		player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Ahora debes hacer click derecho con el item que usarás en la tienda."));
 		
 		new BukkitRunnable() {
 			
@@ -120,7 +120,7 @@ public class AdminShop extends AbstractShop {
 					this.cancel();
 					
 					if(player.isOnline())
-						player.sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &cTu tienda se ha eliminado porque no has colocado el item que usarías en ella."));
+						player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cTu tienda se ha eliminado porque no has colocado el item que usarías en ella."));
 					
 					waitlistPlayers.remove(player);
 					
@@ -149,12 +149,12 @@ public class AdminShop extends AbstractShop {
 				Player player = e.getPlayer();
 				
 				if(player.getItemInHand() == null) {
-					player.sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &cDebes tener el item que usarás en la tienda puesto en tu mano.")); 
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item que usarás en la tienda puesto en tu mano.")); 
 					return;
 				}
 				
 				if(ItemsProtocol.isMaterialBlocked(player.getItemInHand().getType())) {
-					player.sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &cEl item que intentas usar en la tienda está bloqueado.")); 
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cEl item que intentas usar en la tienda está bloqueado.")); 
 					return;
 				}
 				
@@ -181,7 +181,7 @@ public class AdminShop extends AbstractShop {
 				
 				waitlistPlayers.remove(e.getPlayer());
 				
-				e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &aHas creado una tienda correctamente!"));
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas creado una tienda correctamente!"));
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
 				return;
 				
@@ -209,14 +209,14 @@ public class AdminShop extends AbstractShop {
 						
 						if(e.getPlayer().getInventory().firstEmpty() == -1){
 							
-							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7 No tienes espacio"));
+							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7 No tienes espacio"));
 							
 						}
 						else{
 
 							SurvivalBankBase.removeMoney(e.getPlayer(), buyPrice);
 							e.getPlayer().getInventory().addItem(shopItem);
-							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
+							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
 									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+buyPrice));
 							
 						}
@@ -224,7 +224,7 @@ public class AdminShop extends AbstractShop {
 						return;
 					}
 					
-					e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No posees suficiente dinero."));
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No posees suficiente dinero."));
 					return;
 					
 				}else{
@@ -233,7 +233,7 @@ public class AdminShop extends AbstractShop {
 						
 						if(e.getPlayer().getInventory().firstEmpty() == -1){
 							
-							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7 No tienes espacio"));
+							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7 No tienes espacio"));
 							
 						}
 						else{
@@ -242,14 +242,14 @@ public class AdminShop extends AbstractShop {
 							SurvivalBankBase.removeMoney(e.getPlayer(), buyPrice);
 							shopItem.setAmount(1);
 							e.getPlayer().getInventory().addItem(shopItem);
-							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
+							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
 									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+buyPrice));
 							
 						}
 						return;
 					}
 					
-					e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No posees suficiente dinero."));
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No posees suficiente dinero."));
 					return;
 					
 				}
@@ -276,7 +276,7 @@ public class AdminShop extends AbstractShop {
 						if(item2Sell.getAmount() >= shopItem.getAmount()){
 								
 							SurvivalBankBase.addMoney(e.getPlayer(), sellPrice);
-							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
+							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
 									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+sellPrice));
 							e.getPlayer().getInventory().removeItem(shopItem);
 							shopItem.setAmount(1);
@@ -284,11 +284,11 @@ public class AdminShop extends AbstractShop {
 							return;
 								
 						}else{
-							e.getPlayer().sendMessage("vender lo maximo que tengas"); //trabajando..
+							e.getPlayer().sendMessage("vender lo maximo que tengas"); //trabajando.. TODO
 						}
 						
 					}
-					e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No tienes suficiente de este item para vender."));
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No tienes suficiente de este item para vender."));
 					return;
 					
 				}else{
@@ -303,13 +303,13 @@ public class AdminShop extends AbstractShop {
 						if(item2Sell.getType().equals(shopItem.getType())){
 							e.getPlayer().getInventory().removeItem(shopItem);
 							SurvivalBankBase.addMoney(e.getPlayer(), sellPrice);
-							e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
+							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
 									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+sellPrice));
 							return;
 						}
 						
 					}
-					e.getPlayer().sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &7No tienes este item para vender."));
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No tienes este item para vender."));
 					return;
 					
 				}
@@ -371,7 +371,7 @@ public class AdminShop extends AbstractShop {
 		
 		if(waitlistPlayers.contains(player)) {
 			this.sign.getBlock().breakNaturally();
-			player.sendMessage(TextUtil.format("&c&lAdmin&eShop &b&l» &cDebes terminar de crear la tienda que estabas haciendo antes de hacer otra.")); 
+			player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes terminar de crear la tienda que estabas haciendo antes de hacer otra.")); 
 			return ShopLoadStatus.CANNOT_LOAD;
 		}
 		

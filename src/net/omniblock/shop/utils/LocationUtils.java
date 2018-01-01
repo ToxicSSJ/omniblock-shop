@@ -31,7 +31,7 @@ public class LocationUtils {
 		if(location == null)
 			return null;
 		
-		return new String(location.getWorld().getName() + "," + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ());
+		return new String(location.getWorld().getName() + "," + location.getX() + "," + location.getY() + "," + location.getZ());
 		
 	}
 	

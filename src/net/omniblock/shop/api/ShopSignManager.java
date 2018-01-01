@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -114,7 +115,7 @@ public class ShopSignManager {
 						
 						ConfigType.SHOPDATA.getConfig().set("usershop." + uniqueID, null);
 						ConfigType.SHOPDATA.getConfigObject().save();
-						return;
+						continue;
 						
 					}
 					
@@ -130,25 +131,27 @@ public class ShopSignManager {
 					
 					try {
 						
-						Block block = LocationUtils.deserializeLocation(ConfigType.SHOPDATA.getConfig().getString("adminshop." + uniqueID + ".location")).getBlock();
+						Location location = LocationUtils.deserializeLocation(ConfigType.SHOPDATA.getConfig().getString("adminshop." + uniqueID + ".location"));
 						
-						Sign sign = (Sign) block.getState();
+						Sign sign = (Sign) location.getBlock().getState();
 						Chest chest = TileUtils.getChestBehindSign(sign);
 						
-						AdminShop userShop = new AdminShop(
+						AdminShop adminShop = new AdminShop(
 								sign,
 								chest,
 								ShopActionType.ADMIN,
 								uniqueID);
 						
-						if(userShop.loadSign(null) == ShopLoadStatus.LOADED)
-							addShop(userShop);
+						if(adminShop.loadSign(null) == ShopLoadStatus.LOADED)
+							addShop(adminShop);
 						
 					} catch(Exception e) {
 						
-						ConfigType.SHOPDATA.getConfig().set("usershop." + uniqueID, null);
+						e.printStackTrace();
+						
+						ConfigType.SHOPDATA.getConfig().set("adminshop." + uniqueID, null);
 						ConfigType.SHOPDATA.getConfigObject().save();
-						return;
+						continue;
 						
 					}
 					
