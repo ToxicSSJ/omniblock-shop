@@ -4,41 +4,32 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
 
 import net.omniblock.network.library.helpers.ItemBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder.Action;
 import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.shop.api.type.AdminShopItem;
+import net.omniblock.shop.api.type.KindItem;
 
-public abstract class InventoryShop {
+public class InventoryShop {
 
-	protected String npcName;
-	protected String inventoryName;
-	protected Player player;
+	private String npcName;
+	private Player player;
+	private String inventoryName;
 	
-	protected static final String inventoryBuy = " &7- " + "&8¿Que deseas compra?";
-	protected static final String inventorySell = "&7-" + "&8¿Quieres vender algo?";
+	private KindItem kind;
 	
-	protected static final String[] itemLore = 
+	private static final String inventoryBuy = " &7- " + "&8¿Que deseas compra?";
+	
+	private static final String[] itemLore = 
 			
 			new String[] {
 			TextUtil.format("&8- &7Sería una buena elección"),
 			TextUtil.format("&7comprar un artículo como"),
 			TextUtil.format("&7este, además que lo tengo"),
 			TextUtil.format("&7a buen precio.")};
-	
-	protected static final int emeraldSlot = 2;
-	protected static final int paperSlot = 6;
-	protected static final int arrowSlot = 53;
 
-	protected static final ItemStack buy = new ItemBuilder(Material.EMERALD).name(TextUtil.format("&2Comprar")).amount(1).build();
-	protected static final ItemStack sell = new ItemBuilder(Material.PAPER).name(TextUtil.format("&cVender")).amount(1).build();
-	protected static final ItemStack nextPage = new ItemBuilder(Material.ARROW).name(TextUtil.format("&2&lVer más…")).amount(1).build();
-
-	
-	
 	/**
 	 * Este objeto se utiliza para crear un inventario.
 	 * 
@@ -50,55 +41,71 @@ public abstract class InventoryShop {
 	 *            Nombre del inventario.
 	 * 
 	 */
-	public InventoryShop(String npcName, Player player, String inventoryName) {
+	public InventoryShop(KindItem kind, String npcName, Player player, String inventoryName) {
 
+		this.kind = kind;
+		
 		this.npcName = npcName;
 		this.player = player;
 		this.inventoryName = inventoryName;
 
-	}
-	
-	/**
-	 * Crear un inventario a un NPC.
-	 * 
-	 */
-	public void makeIventory() {
-		
-		InventoryBuilder ib = new InventoryBuilder(TextUtil.format(npcName + " &8- " + "&7" + inventoryName), 1 * 9, true);
-		ib.addItem(buy, emeraldSlot, new Action() {
-			@Override
-			public void click(ClickType click, Player player) {
-				buy();
-				return;
-			}
-		});
-		ib.addItem(sell, paperSlot, new Action() {
-			@Override
-			public void click(ClickType click, Player player) {
-				sell();
-				return;
-			}
-		});
-		ib.open(player);
 	}
 
 	/**
 	 * Sistema de compra de ítems del NPC.
 	 * 
 	 */
-	protected abstract void buy();
+	public void buyAndSell() {
 
-	/**
-	 * Sistema de venta de items del NPC
-	 * 
-	 */
-	protected abstract void sell();
+		InventoryBuilder ib = new InventoryBuilder(TextUtil.format(npcName + inventoryBuy), 6 * 9, true);
+
+		int CURRENT_SLOT = 0;
+		int MAX_SLOT = (6 * 9) - 1;
+
+		for (AdminShopItem item : AdminShopItem.values()) {
+
+			if (item.getKind() != kind)
+				continue;
+			if (CURRENT_SLOT == MAX_SLOT)
+				break;
+
+			ib.addItem(new ItemBuilder(item.getMaterial()).data(item.getData()).amount(1)
+					.lore("")
+					.lore(itemLore)
+					.lore("")
+					.lore("&6Precio del artículo: " + "&e" + item.getPriceBuy())
+					.lore("&2Se vende en: " + "&a" + item.getPriceSell())
+					.lore("")
+					.build(), CURRENT_SLOT,
+					new Action() {
+						@Override
+						public void click(ClickType click, Player player) {
+							
+							if(click == click.LEFT) {
+								makeBuy(item, item.getPriceBuy());
+								return;
+							}
+							if(click == click.RIGHT) {
+								player.sendMessage("VENDISTE");
+								return;
+							}
+						}
+
+					});
+			
+			CURRENT_SLOT++;
+			
+			}
+
+		ib.open(player);
+		return;
+	}
 
 	/**
 	 * Colocar más ítem para comprar o alguna opción extra.
 	 * 
 	 */
-	protected void makeBuy(AdminShopItem item, int price) {
+	private void makeBuy(AdminShopItem item, int price) {
 		
 		Material material = item.getMaterial();
 		
@@ -117,7 +124,7 @@ public abstract class InventoryShop {
 	 * Hacer la venta de algún item.
 	 * 
 	 * */
-	protected void makeSell() {
+	private void makeSell() {
 		
 	}
 }
