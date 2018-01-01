@@ -567,17 +567,20 @@ public class ShopSignManager {
 			// [ADMIN]             			| Prefijo tienda.
 			//
 			if(e.getLine(0).equalsIgnoreCase(LineRegex.CREATE_ADMIN_SHOP_UP)){
-					
-					AdminShop shop = new AdminShop(
-							(Sign) e.getBlock().getState(),
-							chest,
-							ShopActionType.ADMIN,
-							UUID.randomUUID().toString().substring(0, 4));
-					
-					if(shop.loadSign(e.getPlayer()) == ShopLoadStatus.LOADED)
-						addShop(shop);
-					
+				
+				if(!e.getPlayer().hasPermission("shop.adminshop.admin"))
 					return;
+				
+				AdminShop shop = new AdminShop(
+						(Sign) e.getBlock().getState(),
+						chest,
+						ShopActionType.ADMIN,
+						UUID.randomUUID().toString().substring(0, 4));
+				
+				if(shop.loadSign(e.getPlayer()) == ShopLoadStatus.LOADED)
+					addShop(shop);
+				
+				return;
 					
 			}
 			
