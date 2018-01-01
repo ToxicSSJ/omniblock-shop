@@ -17,6 +17,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.ItemLine;
 
+import net.omniblock.network.library.helpers.ItemBuilder;
 import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.packets.util.Lists;
 import net.omniblock.shop.ShopPlugin;
@@ -27,6 +28,7 @@ import net.omniblock.shop.api.exception.SignLoadException;
 import net.omniblock.shop.api.type.AdminShopItem;
 import net.omniblock.shop.api.type.ShopActionType;
 import net.omniblock.shop.api.type.ShopType;
+import net.omniblock.shop.utils.InventoryUtils;
 import net.omniblock.shop.utils.ItemNameUtils;
 import net.omniblock.survival.base.SurvivalBankBase;
 
@@ -113,7 +115,6 @@ public class AdminShop extends AbstractShop {
 					return;
 					
 				}
-					
 				
 				if(seconds - 1 == 0 || !player.isOnline()) {
 					
@@ -142,6 +143,7 @@ public class AdminShop extends AbstractShop {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void clickEvent(PlayerInteractEvent e) {
+		
 		if(status == AdminShopStatus.WAITING_ITEM){
 			
 			if(waitlistPlayers.contains(e.getPlayer()) && e.getPlayer().equals(cachePlayer)){
@@ -158,8 +160,9 @@ public class AdminShop extends AbstractShop {
 					return;
 				}
 				
-				shopItem = e.getPlayer().getItemInHand();
+				shopItem = e.getPlayer().getItemInHand().clone();
 				shopItem.setAmount(1);
+				
 				status = AdminShopStatus.CREATED;
 				
 				hologram = HologramsAPI.createHologram(ShopPlugin.getInstance(), chest.getLocation().clone().add(.5, 1.8, .5));
@@ -170,7 +173,6 @@ public class AdminShop extends AbstractShop {
 				
 				int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
 				String sell = "&aV: &0&l$&0" + sellPrice;
-				
 				
 				sign.setLine(0, actionType.getFormattedAction());
 				sign.setLine(1, TextUtil.format("&n" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased()));
@@ -190,133 +192,114 @@ public class AdminShop extends AbstractShop {
 			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda a la que intentas acceder se encuentra en construcción...")); 
 			return;
 			
-		}else{
+		}
 			
+		boolean isSneaking = e.getPlayer().isSneaking();
+		int money = SurvivalBankBase.getMoney(e.getPlayer());
+		
+		if(e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
 			
-			boolean isSneaking = e.getPlayer().isSneaking();
-			int money = SurvivalBankBase.getMoney(e.getPlayer());
+			int buyPrice = AdminShopItem.getBuyPriceByMaterial(shopItem.getType());
+			int maxStackSpace = InventoryUtils.getMaxStackSpaceQuantity(e.getPlayer().getInventory(), shopItem);
 			
-			if(e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+			if(isSneaking) {
 				
-				int buyPrice = AdminShopItem.getBuyPriceByMaterial(shopItem.getType());
+				buyPrice *= maxStackSpace;
 				
-				if(isSneaking){
+				if(money < buyPrice) {
 					
-					buyPrice *= 64;
-					shopItem.setAmount(64);
-					
-					if(money>=buyPrice){
-						
-						if(e.getPlayer().getInventory().firstEmpty() == -1){
-							
-							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7 No tienes espacio"));
-							
-						}
-						else{
-
-							SurvivalBankBase.removeMoney(e.getPlayer(), buyPrice);
-							e.getPlayer().getInventory().addItem(shopItem);
-							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
-									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+buyPrice));
-							
-						}
-						
-						return;
-					}
-					
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No posees suficiente dinero."));
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Te hacen falta &c$" + (buyPrice - money) + " &7para poder comprar &f&lx" + maxStackSpace + " &7" + (maxStackSpace > 1 ? "items" : "item") + " en esta tienda!")); 
 					return;
+				
+				}
+				
+				if(!InventoryUtils.hasSpaceForStack(e.getPlayer().getInventory(), new ItemBuilder(shopItem).amount(maxStackSpace).build())) {
 					
-				}else{
-					
-					if(money>=buyPrice){
-						
-						if(e.getPlayer().getInventory().firstEmpty() == -1){
-							
-							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7 No tienes espacio"));
-							
-						}
-						else{
-							
-							shopItem.setAmount(1);
-							SurvivalBankBase.removeMoney(e.getPlayer(), buyPrice);
-							shopItem.setAmount(1);
-							e.getPlayer().getInventory().addItem(shopItem);
-							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has comprado &a"+shopItem.getAmount()+" &e"
-									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+buyPrice));
-							
-						}
-						return;
-					}
-					
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No posees suficiente dinero."));
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo tienes suficiente espacio para almacenar los items!")); 
 					return;
 					
 				}
+				
+				SurvivalBankBase.removeMoney(e.getPlayer(), buyPrice);
+				
+				e.getPlayer().getInventory().addItem(new ItemBuilder(shopItem).amount(maxStackSpace).build());
+				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
+				
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has comprado &f&lx" + maxStackSpace + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()) + " &7por &a$" + buyPrice + "."));
+				return;
+				
 			}
-			else if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK)){
+			
+			if(money < buyPrice) {
 				
-				isSneaking = e.getPlayer().isSneaking();
-				
-				int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
-				
-				if(isSneaking){
-					
-					ItemStack[] inventory = e.getPlayer().getInventory().getContents();
-					shopItem.setAmount(64);
-					sellPrice *= 64;
-					
-					for(ItemStack item2Sell : inventory){
-						
-						if(item2Sell == null) continue;
-						
-						if(!shopItem.getType().equals(item2Sell.getType()))
-							continue;
-							
-						if(item2Sell.getAmount() >= shopItem.getAmount()){
-								
-							SurvivalBankBase.addMoney(e.getPlayer(), sellPrice);
-							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
-									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+sellPrice));
-							e.getPlayer().getInventory().removeItem(shopItem);
-							shopItem.setAmount(1);
-								
-							return;
-								
-						}else{
-							e.getPlayer().sendMessage("vender lo maximo que tengas"); //trabajando.. TODO
-						}
-						
-					}
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No tienes suficiente de este item para vender."));
-					return;
-					
-				}else{
-					
-					shopItem.setAmount(1);
-					ItemStack[] inventory = e.getPlayer().getInventory().getContents();
-					
-					for(ItemStack item2Sell : inventory){
-						
-						if(item2Sell == null) continue;
-						
-						if(item2Sell.getType().equals(shopItem.getType())){
-							e.getPlayer().getInventory().removeItem(shopItem);
-							SurvivalBankBase.addMoney(e.getPlayer(), sellPrice);
-							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has vendido &a"+shopItem.getAmount()+" &e"
-									+ItemNameUtils.getMaterialName(shopItem.getType())+" &7por &a$"+sellPrice));
-							return;
-						}
-						
-					}
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No tienes este item para vender."));
-					return;
-					
-				}
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Te hacen falta &c$" + (buyPrice - money) + " &7para poder comprar &f&lx" + shopItem.getMaxStackSize() + " &7" + (shopItem.getMaxStackSize() > 1 ? "items" : "item") + " en esta tienda!")); 
+				return;
+			
 			}
+			
+			if(!InventoryUtils.hasSpaceForStack(e.getPlayer().getInventory(), new ItemBuilder(shopItem).amount(1).build())) {
+				
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo tienes suficiente espacio para almacenar los items!")); 
+				return;
+				
+			}
+			
+			SurvivalBankBase.removeMoney(e.getPlayer(), buyPrice);
+			
+			e.getPlayer().getInventory().addItem(new ItemBuilder(shopItem).amount(1).build());
+			e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
+			
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has comprado &f&lx1" + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()) + " &7por &a$" + buyPrice + "."));
+			return;
+			
 		}
 		
-		e.getPlayer().sendMessage("Esto es una complicacion :v");
+		isSneaking = e.getPlayer().isSneaking();
+		
+		int sellPrice = AdminShopItem.getSellPriceByMaterial(shopItem.getType());
+		
+		int avaiableAmount = InventoryUtils.countMatches(e.getPlayer().getInventory(), shopItem);
+		int sellAmount = 1;
+		
+		if(isSneaking) {
+			
+			sellAmount = avaiableAmount > shopItem.getMaxStackSize() ? shopItem.getMaxStackSize() : avaiableAmount;
+			sellPrice *= sellAmount;
+			
+			if(avaiableAmount == 0) {
+				
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
+				return;
+				
+			}
+			
+			InventoryUtils.removeQuantity(e.getPlayer().getInventory(), shopItem, sellAmount);
+			SurvivalBankBase.addMoney(e.getPlayer(), sellPrice);
+			
+			e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+			
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has vendido &f&lx" + sellAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + sellPrice + "!"));
+			return;
+			
+		}
+		
+		sellPrice *= sellAmount;
+		
+		if(avaiableAmount == 0) {
+			
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
+			return;
+			
+		}
+		
+		InventoryUtils.removeQuantity(e.getPlayer().getInventory(), shopItem, sellAmount);
+		SurvivalBankBase.addMoney(e.getPlayer(), sellPrice);
+		
+		e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+		
+		e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has vendido &f&lx" + sellAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + sellPrice + "!"));
+		return;
+		
 	}
 
 	@SuppressWarnings("deprecation")

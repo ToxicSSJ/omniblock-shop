@@ -66,18 +66,12 @@ public class InventoryUtils {
 		
 		List<ItemStack> toRemoveStacks = Lists.newArrayList();
 		Map<ItemStack, Integer> toSetStacks = new HashMap<ItemStack, Integer>();
-		
-		if(quantity <= item.getMaxStackSize())
-			if(inventory.contains(item)) {
-				inventory.setItem(inventory.first(item), null);
-				return;
-			}
 			
 		
 		for(ItemStack cacheItem : inventory.getContents()) {
 			
 			if(quantity <= 0)
-				return;
+				break;
 			
 			if(cacheItem == null)
 				continue;
@@ -100,7 +94,7 @@ public class InventoryUtils {
 			
 		}
 		
-		toRemoveStacks.forEach(itemStack -> inventory.setItem(inventory.first(itemStack), null));
+		toRemoveStacks.forEach(itemStack -> inventory.setItem(getItemStackSlot(inventory, itemStack), null));
 		toSetStacks.entrySet().forEach(entry -> entry.getKey().setAmount(entry.getValue()));
 		return;
 		
@@ -141,6 +135,58 @@ public class InventoryUtils {
 			return true;
 		
 		return false;
+		
+	}
+	
+	/**
+	 * 
+	 * Con este metodo se puede obtener el
+	 * slot donde se encuentra un itemstack
+	 * dentro de un inventario.
+	 * 
+	 * @param inventory El inventario.
+	 * @param item El stack.
+	 * @return El slot donde se encuentra el
+	 * item, en caso de que no se logre encontrar
+	 * uno se devolverá -1.
+	 */
+	public static int getItemStackSlot(Inventory inventory, ItemStack item) {
+		
+		if(!inventory.contains(item))
+			return -1;
+		
+		for(int i = 0; i <= inventory.getSize() - 1; i++)
+			if(inventory.getItem(i) != null)
+				if(inventory.getItem(i).equals(item))
+					return i;
+		
+		return -1;
+		
+	}
+
+	/**
+	 * 
+	 * Con este metodo se puede obtener la
+	 * cantidad maxima de un item que puede
+	 * almacenar un inventario.
+	 * 
+	 * @param inventory El inventario.
+	 * @param item El item.
+	 * @return La cantidad maxima de el tipo
+	 * de item que puede almacenar el inventario.
+	 */
+	public static int getMaxStackSpaceQuantity(Inventory inventory, ItemStack item) {
+		
+		if(inventory.firstEmpty() != -1)
+			return item.getMaxStackSize();
+		
+		for(int i = 0; i <= inventory.getSize() - 1; i++)
+			if(inventory.getItem(i) != null)
+				if(inventory.getItem(i).isSimilar(item))
+					if(inventory.getItem(i).getAmount() != item.getMaxStackSize())
+						return item.getMaxStackSize() - inventory.getItem(i).getAmount();
+		
+		return 0;
 		
 	}
 	

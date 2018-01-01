@@ -238,7 +238,9 @@ public class UserShop extends AbstractShop {
 					return;
 				}
 				
-				shopItem = e.getPlayer().getItemInHand();
+				shopItem = e.getPlayer().getItemInHand().clone();
+				shopItem.setAmount(1);
+				
 				status = UserShopStatus.CREATED;
 				
 				hologram = HologramsAPI.createHologram(ShopPlugin.getInstance(), chest.getLocation().clone().add(.5, 1.8, .5));

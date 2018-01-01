@@ -454,6 +454,33 @@ public class ShopSignManager {
 							
 						}
 						
+						//
+						// Acciones a tomar en el caso
+						// de que la tienda haya sido
+						// tipo Admin. (AdminShop)
+						//
+						if(shop instanceof AdminShop) {
+							
+							//
+							// Si quien destruyó la tienda fue un
+							// miembro del Staff y este es CEO/Admin
+							// se ejecutará la acción y se enviará
+							// el registro al Discord.
+							//
+							if(e.getPlayer().isOp() || e.getPlayer().hasPermission("shop.adminshop.adminbreak")) {
+								
+								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has forzado la destrucción de la tienda &c'" + shop.getUniqueID() + "'&7 correctamente!"));
+								
+								shop.destroySign();
+								return;
+								
+							}
+								
+							e.setCancelled(true);
+							return;
+							
+						}
+						
 					}
 					
 				}
