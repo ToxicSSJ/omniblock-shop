@@ -86,7 +86,7 @@ public class AdminShop extends AbstractShop {
 	public void waitItem(Player player){
 		waitlistPlayers.add(player);
 		
-		sign.setLine(1, TextUtil.format("Has click con el"));
+		sign.setLine(1, TextUtil.format("Haz click con el"));
 		sign.setLine(2, TextUtil.format("tipo de item que"));
 		sign.setLine(3, TextUtil.format("negociaras."));
 		

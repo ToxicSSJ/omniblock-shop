@@ -6,6 +6,7 @@ public enum KindItem {
 	FOODSTUFFS,
 	ANIMALS,
 	ARMORS,
+	TOOLS,
 	
 	;
 	
