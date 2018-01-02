@@ -1,5 +1,8 @@
 package net.omniblock.shop.api.object.npc.object;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -9,16 +12,21 @@ import net.omniblock.network.library.helpers.ItemBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder.Action;
 import net.omniblock.network.library.utils.TextUtil;
+import net.omniblock.shop.api.object.npc.object.InventoryPaginator.PaginatorStyle;
+import net.omniblock.shop.api.object.npc.object.InventorySlotter.SlotLocatorType;
 import net.omniblock.shop.api.type.AdminShopItem;
 import net.omniblock.shop.api.type.KindItem;
 
 public class InventoryShop {
 
+	public static List<InventoryShop> createdShops = new ArrayList<InventoryShop>();
+	
 	private String npcName;
-	private Player player;
-	private String inventoryName;
 	
 	private KindItem kind;
+	
+	private InventoryPaginator paginator;
+	private InventorySlotter slotter;
 	
 	private static final String inventoryBuy = " &7- " + "&8¿Que deseas compra?";
 	
@@ -41,51 +49,52 @@ public class InventoryShop {
 	 *            Nombre del inventario.
 	 * 
 	 */
-	public InventoryShop(KindItem kind, String npcName, Player player, String inventoryName) {
+	public InventoryShop(KindItem kind, String npcName) {
 
 		this.kind = kind;
-		
 		this.npcName = npcName;
-		this.player = player;
-		this.inventoryName = inventoryName;
+		
+		for(InventoryShop shop : createdShops)
+			if(shop.getKind() == this.kind && shop.getNPCName().equals(this.npcName))
+				throw new UnsupportedOperationException("Ya se ha inicializado una tienda del tipo " + kind.name() + " previamente.");
+		
+		this.paginator = new InventoryPaginator(PaginatorStyle.COLOURED_ARROWS);
+		this.slotter = new InventorySlotter(SlotLocatorType.ROUND_SIX);
 
-	}
-
-	/**
-	 * Sistema de compra de ítems del NPC.
-	 * 
-	 */
-	public void buyAndSell() {
-
-		InventoryBuilder ib = new InventoryBuilder(TextUtil.format(npcName + inventoryBuy), 6 * 9, true);
-
-		int CURRENT_SLOT = 0;
-		int MAX_SLOT = (6 * 9) - 1;
-
-		for (AdminShopItem item : AdminShopItem.values()) {
-
-			if (item.getKind() != kind)
+		InventoryBuilder cacheBuilder = new InventoryBuilder(TextUtil.format(this.npcName + inventoryBuy), 6 * 9, false);
+		
+		for(AdminShopItem item : AdminShopItem.values()) {
+			
+			if(item.getKind() != this.kind)
 				continue;
-			if (CURRENT_SLOT == MAX_SLOT)
-				break;
-
-			ib.addItem(new ItemBuilder(item.getMaterial()).data(item.getData()).amount(1)
+			
+			if(!slotter.hasNext()) {
+				
+				paginator.addPage(cacheBuilder);
+				slotter.reset();
+				
+				cacheBuilder = new InventoryBuilder(TextUtil.format(this.npcName + inventoryBuy), 6 * 9, false);
+				
+			}
+			
+			cacheBuilder.addItem(new ItemBuilder(item.getMaterial()).data(item.getData()).amount(1)
 					.lore("")
 					.lore(itemLore)
 					.lore("")
-					.lore("&6Precio del artículo: " + "&e" + item.getPriceBuy())
-					.lore("&2Se vende en: " + "&a" + item.getPriceSell())
+					.lore("&aCompralo en " + "&e&l$&r&e" + item.getPriceBuy())
+					.lore("&9Vendelo en " + "&e&l$&r&e" + item.getPriceSell())
 					.lore("")
-					.build(), CURRENT_SLOT,
+					.build(), slotter.next(),
 					new Action() {
+				
 						@Override
 						public void click(ClickType click, Player player) {
 							
-							if(click == click.LEFT) {
-								makeBuy(item, item.getPriceBuy());
+							if(click == ClickType.LEFT) {
+								makeBuy(item, player, item.getPriceBuy());
 								return;
 							}
-							if(click == click.RIGHT) {
+							if(click == ClickType.RIGHT) {
 								player.sendMessage("VENDISTE");
 								return;
 							}
@@ -93,19 +102,33 @@ public class InventoryShop {
 
 					});
 			
-			CURRENT_SLOT++;
+			continue;
 			
-			}
-
-		ib.open(player);
+		}
+		
+		if(!paginator.contains(cacheBuilder))
+			paginator.addPage(cacheBuilder);
+		
 		return;
+		
+	}
+
+	/**
+	 * Sistema de compra de ítems del NPC.
+	 * 
+	 */
+	public void openShop(Player player) {
+		
+		paginator.openInventory(player);
+		return;
+		
 	}
 
 	/**
 	 * Colocar más ítem para comprar o alguna opción extra.
 	 * 
 	 */
-	private void makeBuy(AdminShopItem item, int price) {
+	private void makeBuy(AdminShopItem item, Player player, int price) {
 		
 		Material material = item.getMaterial();
 		
@@ -124,8 +147,42 @@ public class InventoryShop {
 	 * Hacer la venta de algún item.
 	 * 
 	 * */
+	@SuppressWarnings("unused")
 	private void makeSell() {
 		
 	}
+
+	public String getNPCName() {
+		return npcName;
+	}
+	
+	public KindItem getKind() {
+		return kind;
+	}
+	
+	/**
+	 * 
+	 * Este metodo buscará una tienda registrada
+	 * con las caracteristicas dadas, en caso
+	 * de que no se logre encontrar dicha tienda
+	 * simplemente se creará una nueva y posteriormente
+	 * se registrará para futuras busquedas.
+	 * 
+	 * @param kind Tipo de tienda.
+	 * @param npcname El nombre del npc que atienda
+	 * dicha tienda.
+	 * @return El objeto de la tienda habilitado para
+	 * utilizar sus metodos.
+	 */
+	public static InventoryShop lookupShop(KindItem kind, String npcname) {
+		
+		for(InventoryShop shop : createdShops)
+			if(shop.getKind() == kind && shop.getNPCName().equals(npcname))
+				return shop;
+		
+		return new InventoryShop(kind, npcname);
+		
+	}
+	
 }
 	

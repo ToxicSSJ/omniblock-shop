@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.citizensnpcs.api.npc.NPC;
-import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.shop.api.object.npc.NPCShop.NPCAction;
 import net.omniblock.shop.api.object.npc.object.InventoryShop;
 
@@ -27,8 +26,8 @@ public enum NPCShopType {
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 				
-					InventoryShop shop = new InventoryShop(KindItem.FOODSTUFFS, NPCShopType.SHOP_FOOD.getName(), player, TextUtil.format("¡Bienvenido!"));
-					shop.buyAndSell();
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.FOODSTUFFS, NPCShopType.SHOP_FOOD.getName());
+					shop.openShop(player);
 					
 					return;
 					
@@ -44,7 +43,10 @@ public enum NPCShopType {
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 
+					
+					
 				}
+				
 			}),
 	SHOP_BLOCKS("&4&lPedro", "&6&lCONSTUCTOR", " ", new String[] {
 
@@ -56,7 +58,10 @@ public enum NPCShopType {
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 					
-			
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.BUILDING_BLOCKS, NPCShopType.SHOP_BLOCKS.getName());
+					shop.openShop(player);
+					
+					return;
 					
 				}
 			}),
