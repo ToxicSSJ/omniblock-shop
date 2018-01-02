@@ -109,6 +109,7 @@ public class InventoryShop {
 		if(!paginator.contains(cacheBuilder))
 			paginator.addPage(cacheBuilder);
 		
+		createdShops.add(this);
 		return;
 		
 	}
