@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
 
 import net.omniblock.network.library.helpers.ItemBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder;
@@ -16,6 +17,9 @@ import net.omniblock.shop.api.object.npc.object.InventoryPaginator.PaginatorStyl
 import net.omniblock.shop.api.object.npc.object.InventorySlotter.SlotLocatorType;
 import net.omniblock.shop.api.type.AdminShopItem;
 import net.omniblock.shop.api.type.KindItem;
+import net.omniblock.shop.utils.InventoryUtils;
+import net.omniblock.shop.utils.ItemNameUtils;
+import net.omniblock.survival.base.SurvivalBankBase;
 
 public class InventoryShop {
 
@@ -81,26 +85,18 @@ public class InventoryShop {
 					.lore("")
 					.lore(itemLore)
 					.lore("")
-					.lore("&aCompralo en " + "&e&l$&r&e" + item.getPriceBuy())
-					.lore("&9Vendelo en " + "&e&l$&r&e" + item.getPriceSell())
+					.lore("&aCompralo en " + "&e&l$&r&e" + item.getPriceBuy() + " &8&n<Click izquierdo>")
+					.lore("")
+					.lore("&9Vendelo en " + "&e&l$&r&e" + item.getPriceSell() + " &8&n<Click derecho>")
 					.lore("")
 					.build(), slotter.next(),
 					new Action() {
 				
 						@Override
 						public void click(ClickType click, Player player) {
-							
-							if(click == ClickType.LEFT) {
-								makeBuy(item, player, item.getPriceBuy());
-								return;
-							}
-							if(click == ClickType.RIGHT) {
-								player.sendMessage("VENDISTE");
-								return;
-							}
-						}
-
-					});
+							makeSale(item, player, item.getPriceBuy(), item.getPriceSell(), getClick(click));
+							return;
+						}});
 			
 			continue;
 			
@@ -125,32 +121,80 @@ public class InventoryShop {
 		
 	}
 
+
 	/**
-	 * Colocar más ítem para comprar o alguna opción extra.
+	 * Hacer la venta y compra de algún item.
 	 * 
-	 */
-	private void makeBuy(AdminShopItem item, Player player, int price) {
-		
-		Material material = item.getMaterial();
-		
-		if(material == null) return;
-		if(material != item.getMaterial()) return;
-		
-			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 2, 2);
-			player.sendMessage(TextUtil.format("Gracias por su compra."));
-			player.sendMessage(TextUtil.format("El item comprado le costo: " +  price));
-			player.getInventory().addItem(new ItemBuilder(material).amount(1).data(item.getData()).build());
-			return;
-			
-	}
-	
-	/**
-	 * Hacer la venta de algún item.
+	 * @param item Tipo de item seleccionado.
+	 * @param player Jugador que interactúa con la GUI. 
+	 * @param priceBuy Precio de compra del ITEM.
+	 * @param priceSell Precio de venta del ITEM.
+	 * @param click Tipo de click que se ejecuto en la GUI.
 	 * 
 	 * */
-	@SuppressWarnings("unused")
-	private void makeSell() {
+	private void makeSale(AdminShopItem item, Player player, int priceBuy, int priceSell, ClickType click) {
 		
+		ItemStack  itemShop = new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build();
+		
+		int avaiableAmount = InventoryUtils.countMatches(player.getInventory(), itemShop) + 1;
+		int maxStackSpace = InventoryUtils.getMaxStackSpaceQuantity(player.getInventory(), itemShop);
+		int money = SurvivalBankBase.getMoney(player);
+		
+		if(item.getMaterial() == null) return;
+		if(!player.isOnline()) return;
+		
+		if(click == ClickType.LEFT) {
+			
+			if(money < priceBuy) {
+				
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
+				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Te hacen falta &c$" + (priceBuy - money) + " &7para poder comprar &f&l" + itemShop + " &7 en esta tienda!")); 
+				return;
+			
+			}
+			
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
+			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build());
+			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy+ "."));
+			SurvivalBankBase.removeMoney(player, priceBuy);
+			return;
+			
+		}
+		
+		if(click == ClickType.RIGHT) {
+			
+			if( (avaiableAmount - 1) <= 0) {
+				
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
+				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &cNo tienes " + ItemNameUtils.getMaterialName(item.getMaterial()) + "&c en el inventario.")); 
+				return;
+			
+			}
+			
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
+			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), 1);
+			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has vendido "  + "&8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceSell + "!"));
+			SurvivalBankBase.addMoney(player, priceSell);
+			return;
+		}
+		
+		if(click == ClickType.SHIFT_RIGHT) {
+			
+			if(maxStackSpace <= 1 ) {
+				
+				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &cSolo tienes un artículo de este tipo en el inventario.")); 
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
+				return;
+			}
+			
+			int priceMaxAmount = ( (avaiableAmount - 1) * priceSell);
+			
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
+			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), maxStackSpace);
+			player.sendMessage(TextUtil.format(this.npcName + " &b&l» &7Has vendido todas " + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
+			SurvivalBankBase.addMoney(player, priceMaxAmount);
+			return;
+		}
 	}
 
 	public String getNPCName() {
@@ -159,6 +203,10 @@ public class InventoryShop {
 	
 	public KindItem getKind() {
 		return kind;
+	}
+	
+	public ClickType getClick(ClickType click) {
+		return click;
 	}
 	
 	/**
