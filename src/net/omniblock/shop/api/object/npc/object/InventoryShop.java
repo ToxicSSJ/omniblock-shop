@@ -3,7 +3,6 @@ package net.omniblock.shop.api.object.npc.object;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -85,9 +84,9 @@ public class InventoryShop {
 					.lore("")
 					.lore(itemLore)
 					.lore("")
-					.lore("&aCompralo en " + "&e&l$&r&e" + item.getPriceBuy() + " &8&n<Click izquierdo>")
+					.lore("&aCompralo en " + "&e&l$&r&e" + item.getPriceBuy() + " &8&l(Click izquierdo)")
 					.lore("")
-					.lore("&9Vendelo en " + "&e&l$&r&e" + item.getPriceSell() + " &8&n<Click derecho>")
+					.lore("&9Vendelo en " + "&e&l$&r&e" + item.getPriceSell() + " &8&l(Click derecho)")
 					.lore("")
 					.build(), slotter.next(),
 					new Action() {
@@ -136,8 +135,11 @@ public class InventoryShop {
 		
 		ItemStack  itemShop = new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build();
 		
-		int avaiableAmount = InventoryUtils.countMatches(player.getInventory(), itemShop) + 1;
 		int maxStackSpace = InventoryUtils.getMaxStackSpaceQuantity(player.getInventory(), itemShop);
+		int avaiableAmount = InventoryUtils.countMatches(player.getInventory(), itemShop) + 1;
+		
+		int sellAmount = 1;
+		
 		int money = SurvivalBankBase.getMoney(player);
 		
 		if(item.getMaterial() == null) return;
@@ -155,15 +157,29 @@ public class InventoryShop {
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build());
-			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy+ "."));
+			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy + "."));
 			SurvivalBankBase.removeMoney(player, priceBuy);
+			return;
+			
+		}
+		
+		if(click == ClickType.SHIFT_LEFT) {
+
+			
+			int priceMaxAmount = maxStackSpace * priceBuy;
+			
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
+			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(maxStackSpace).data(item.getData()).build());
+			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" +  maxStackSpace  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
+			SurvivalBankBase.addMoney(player, priceMaxAmount);
+			
 			return;
 			
 		}
 		
 		if(click == ClickType.RIGHT) {
 			
-			if( (avaiableAmount - 1) <= 0) {
+			if(avaiableAmount - 1 <= 0) {
 				
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
 				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &cNo tienes " + ItemNameUtils.getMaterialName(item.getMaterial()) + "&c en el inventario.")); 
@@ -172,7 +188,7 @@ public class InventoryShop {
 			}
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
-			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), 1);
+			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), sellAmount);
 			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has vendido "  + "&8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceSell + "!"));
 			SurvivalBankBase.addMoney(player, priceSell);
 			return;
@@ -180,19 +196,15 @@ public class InventoryShop {
 		
 		if(click == ClickType.SHIFT_RIGHT) {
 			
-			if(maxStackSpace <= 1 ) {
-				
-				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &cSolo tienes un artículo de este tipo en el inventario.")); 
-				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
-				return;
-			}
+			int amount = avaiableAmount > itemShop.getMaxStackSize() ? itemShop.getMaxStackSize() : avaiableAmount - 1;
+			int sellItem = amount * item.getPriceSell();
 			
-			int priceMaxAmount = ( (avaiableAmount - 1) * priceSell);
+			if(amount <= 0) return;
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
-			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), maxStackSpace);
-			player.sendMessage(TextUtil.format(this.npcName + " &b&l» &7Has vendido todas " + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
-			SurvivalBankBase.addMoney(player, priceMaxAmount);
+			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), amount);
+			player.sendMessage(TextUtil.format(this.npcName + " &b&l» &7Has vendido &f&lx" + amount  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + sellItem + "!"));
+			SurvivalBankBase.addMoney(player, sellItem);
 			return;
 		}
 	}
