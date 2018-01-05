@@ -125,7 +125,7 @@ public enum ItemNameUtils {
     ENDER_STONE("piedra del end"),
     EXP_BOTTLE("experiencia"),
     EXPLOSIVE_MINECART("vagón con tnt"),
-    EYE_OF_ENDER("ojo del en"),
+    EYE_OF_ENDER("ojo del end"),
     FEATHER("pluma"),
     FENCE("valla"),
     FENCE_GATE("puerta de valla"),

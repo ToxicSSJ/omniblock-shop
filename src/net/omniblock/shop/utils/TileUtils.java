@@ -23,7 +23,7 @@ public class TileUtils {
 	 * y devolverlo. En caso de que no exista
 	 * este metodo devolverá null.
 	 * 
-	 * @param sign
+	 * @param sign El cartel.
 	 * @return El Cofre detrás de un cartel con
 	 * el tipo de objeto 'Chest'.
 	 * @see Chest
@@ -43,6 +43,17 @@ public class TileUtils {
 		
 	}
 	
+	/**
+	 * 
+	 * Buscar un cofre atado a un hopper
+	 * y devolverlo. En caso de que no exista
+	 * este metodo devolverá null.
+	 * 
+	 * @param hopper La tolva.
+	 * @return El Cofre atado a un hopper con
+	 * el tipo de objeto 'Chest'.
+	 * @see Chest
+	 */
 	public static Chest getChestByHopper(Hopper hopper) {
 		
 		org.bukkit.material.Hopper hopperMaterial = (org.bukkit.material.Hopper) hopper.getData();
