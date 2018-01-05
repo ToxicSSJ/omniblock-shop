@@ -18,6 +18,7 @@ import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import com.gmail.filoghost.holographicdisplays.api.line.ItemLine;
 
 import net.omniblock.network.library.helpers.ItemBuilder;
+import net.omniblock.network.library.utils.InventoryUtils;
 import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.packets.util.Lists;
 import net.omniblock.shop.ShopPlugin;
@@ -28,7 +29,6 @@ import net.omniblock.shop.api.exception.SignLoadException;
 import net.omniblock.shop.api.type.AdminShopItem;
 import net.omniblock.shop.api.type.ShopActionType;
 import net.omniblock.shop.api.type.ShopType;
-import net.omniblock.shop.utils.InventoryUtils;
 import net.omniblock.shop.utils.ItemNameUtils;
 import net.omniblock.survival.base.SurvivalBankBase;
 

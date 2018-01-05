@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilderListener;
+import net.omniblock.network.library.utils.LocationUtils;
 import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.network.systems.CommandPatcher;
 import net.omniblock.shop.ShopPlugin;
@@ -31,7 +32,6 @@ import net.omniblock.shop.api.config.ConfigType;
 import net.omniblock.shop.api.object.npc.NPCShop;
 import net.omniblock.shop.api.type.NPCShopType;
 import net.omniblock.shop.utils.EntityUtils;
-import net.omniblock.shop.utils.LocationUtils;
 
 public class ShopNPCManager {
 
