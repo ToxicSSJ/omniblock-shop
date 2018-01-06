@@ -9,15 +9,19 @@ import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import com.google.common.collect.Lists;
 
@@ -25,6 +29,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilderListener;
 import net.omniblock.network.library.utils.LocationUtils;
+import net.omniblock.network.library.utils.NumberUtil;
 import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.network.systems.CommandPatcher;
 import net.omniblock.shop.ShopPlugin;
@@ -36,6 +41,7 @@ import net.omniblock.shop.utils.EntityUtils;
 public class ShopNPCManager {
 
 	protected static List<NPCShop> registeredNPCs = new ArrayList<NPCShop>();
+	protected static BukkitTask task;
 
 	/**
 	 *
@@ -94,6 +100,9 @@ public class ShopNPCManager {
 							}
 							
 						}
+				
+				
+				makeIA();
 				
 			}
 			
@@ -164,6 +173,40 @@ public class ShopNPCManager {
 	 */
 	public static List<NPCShop> getShops(){
 		return registeredNPCs;
+	}
+	
+	public static  void makeIA() {
+		
+		task = new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				
+				for(NPCShop npc : registeredNPCs) {
+					
+					String text = npc.getDialogs()[NumberUtil.getRandomInt(0, npc.getDialogs().length - 1)]; 
+					
+					if(text == null) continue;
+					
+					
+					for (Entity entity : npc.getNpc().getEntity().getNearbyEntities(3, 3, 3)) {
+
+						if (entity == null) continue;
+
+						if (entity instanceof Player) {
+							
+							Player p = (Player) entity;
+							
+							p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 2, 2);
+							p.sendMessage("");
+							p.sendMessage(TextUtil.format(npc.getNpctype().getName() +  "&b&l» " + "&7" + text));
+							p.sendMessage("");
+						}
+					}	
+				}
+			}
+		
+		}.runTaskTimer(ShopPlugin.getInstance(), 0L, 70L);
 	}
 	
 	/**

@@ -11,12 +11,12 @@ import org.bukkit.inventory.ItemStack;
 import net.omniblock.network.library.helpers.ItemBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder.Action;
+import net.omniblock.network.library.utils.InventoryUtils;
 import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.shop.api.object.npc.object.InventoryPaginator.PaginatorStyle;
 import net.omniblock.shop.api.object.npc.object.InventorySlotter.SlotLocatorType;
 import net.omniblock.shop.api.type.AdminShopItem;
 import net.omniblock.shop.api.type.KindItem;
-import net.omniblock.shop.utils.InventoryUtils;
 import net.omniblock.shop.utils.ItemNameUtils;
 import net.omniblock.survival.base.SurvivalBankBase;
 
@@ -31,15 +31,14 @@ public class InventoryShop {
 	private InventoryPaginator paginator;
 	private InventorySlotter slotter;
 	
-	private static final String inventoryBuy = " &7- " + "&8¿Que deseas compra?";
+	private String inventoryName;
 	
 	private static final String[] itemLore = 
 			
 			new String[] {
-			TextUtil.format("&8- &7Sería una buena elección"),
-			TextUtil.format("&7comprar un artículo como"),
-			TextUtil.format("&7este, además que lo tengo"),
-			TextUtil.format("&7a buen precio.")};
+			TextUtil.format("&8- &7Es una gran elección,"),
+			TextUtil.format("&7además; lo tengo"),
+			TextUtil.format("&7al mejor precio.")};
 
 	/**
 	 * Este objeto se utiliza para crear un inventario.
@@ -52,10 +51,11 @@ public class InventoryShop {
 	 *            Nombre del inventario.
 	 * 
 	 */
-	public InventoryShop(KindItem kind, String npcName) {
+	public InventoryShop(KindItem kind, String npcName, String inventoryName) {
 
 		this.kind = kind;
 		this.npcName = npcName;
+		this.inventoryName = inventoryName;
 		
 		for(InventoryShop shop : createdShops)
 			if(shop.getKind() == this.kind && shop.getNPCName().equals(this.npcName))
@@ -64,7 +64,7 @@ public class InventoryShop {
 		this.paginator = new InventoryPaginator(PaginatorStyle.COLOURED_ARROWS);
 		this.slotter = new InventorySlotter(SlotLocatorType.ROUND_SIX);
 
-		InventoryBuilder cacheBuilder = new InventoryBuilder(TextUtil.format(this.npcName + inventoryBuy), 6 * 9, false);
+		InventoryBuilder cacheBuilder = new InventoryBuilder(TextUtil.format(this.inventoryName), 6 * 9, false);
 		
 		for(AdminShopItem item : AdminShopItem.values()) {
 			
@@ -76,7 +76,7 @@ public class InventoryShop {
 				paginator.addPage(cacheBuilder);
 				slotter.reset();
 				
-				cacheBuilder = new InventoryBuilder(TextUtil.format(this.npcName + inventoryBuy), 6 * 9, false);
+				cacheBuilder = new InventoryBuilder(TextUtil.format(this.inventoryName), 6 * 9, false);
 				
 			}
 			
@@ -235,15 +235,14 @@ public class InventoryShop {
 	 * @return El objeto de la tienda habilitado para
 	 * utilizar sus metodos.
 	 */
-	public static InventoryShop lookupShop(KindItem kind, String npcname) {
+	public static InventoryShop lookupShop(KindItem kind, String npcname, String inventoryName) {
 		
 		for(InventoryShop shop : createdShops)
 			if(shop.getKind() == kind && shop.getNPCName().equals(npcname))
 				return shop;
 		
-		return new InventoryShop(kind, npcname);
+		return new InventoryShop(kind, npcname, inventoryName);
 		
 	}
-	
 }
 	

@@ -38,8 +38,6 @@ public class NPCShop {
 	
 	private boolean loaded;
 	private boolean destroyed;
-	
-	private BukkitTask task;
 
 	/**
 	 *
@@ -131,9 +129,6 @@ public class NPCShop {
 		if(hologram != null)
 			if(!hologram.isDeleted())
 				hologram.delete();
-
-		if(task != null)
-			task.cancel();
 		
 	}
 	
@@ -156,9 +151,6 @@ public class NPCShop {
 			if(!hologram.isDeleted())
 				hologram.delete();
 
-		if(task != null)
-			task.cancel();
-
 		if(ConfigType.SHOP_NPC_DATA.getConfig().isSet("npcshop." + uniqueID)) {
 			
 			ConfigType.SHOP_NPC_DATA.getConfig().set("npcshop." + uniqueID, null);
@@ -170,11 +162,11 @@ public class NPCShop {
 	}
 
 	/**
-	 * Con este método se creará la inteligencia que tendrá el NPC.
+	 * Con este método se obtiene los dialogos de los NPCs.
 	 * 
 	 */
-	public void makeIA() {
-
+	public String[] getDialogs() {
+		return type.getNpcDialogs();
 	}
 	
 	public void saveNPC() {

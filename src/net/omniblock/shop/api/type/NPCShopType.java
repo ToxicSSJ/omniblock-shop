@@ -9,34 +9,37 @@ import net.omniblock.shop.api.object.npc.object.InventoryShop;
 
 public enum NPCShopType {
 
-	DEFAULT("Ciudadano", " ", new String[] {
+	DEFAULT("Ciudadano", "", new String[] {
 
 			"¡Woow, que hermosas vistas tengo aquí, nunca me iría de esta ciudad!",
 			"¡Todos los días aumentas esos estúpidos impuestos, parece que quieren dejar al pueblo pobre!",
 			"¡Está muy tranquila la ciudad hoy en día!" },
 
 			Material.EMERALD, null),
-	SHOP_FOOD("&4&lAlex", "&6&lALIMENTOS", " ", new String[] {
+	SHOP_FOOD("&aAlex", "&6&lALIMENTOS", "scarfguy", new String[] {
 
 			"¡Bienvenido! compre los más ricos panes de la ciudad!",
-			"¡Panes frescos y crujientes solo en este local!" },
+			"¡Panes frescos y crujientes solo en este local!",
+			"Recuerda tener una dieta equilibrada."},
 
 			Material.BREAD, new NPCAction() {
 
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 				
-					InventoryShop shop = InventoryShop.lookupShop(KindItem.FOODSTUFFS, NPCShopType.SHOP_FOOD.getName());
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.FOODSTUFFS, NPCShopType.SHOP_FOOD.getName(), "&8¿Busca algo en particular?");
 					shop.openShop(player);
 					
 					return;
 					
 				}
 			}),
-	SHOP_MATERIALS("&4&lJuan", "&6&lMINERO", " ", new String[] {
+	SHOP_MATERIALS("&aJuan", "&6&lMINERO", "qrj", new String[] {
 
 			"¡Piedras preciosas a buen precio!", 
-			"¡Acércate y mira nuestra galería de cosas únicas para ti!" },
+			"¡Acércate y mira nuestra galería de cosas únicas para ti!",
+			"¡Los materiales son de primerísima calidad!",
+			"Tu pon el dinero, yo te pongo el material que necesitas."},
 
 			Material.DIAMOND_PICKAXE, new NPCAction() {
 
@@ -48,7 +51,7 @@ public enum NPCShopType {
 				}
 				
 			}),
-	SHOP_BLOCKS("&4&lPedro", "&6&lCONSTUCTOR", " ", new String[] {
+	SHOP_BLOCKS("&aPedro", "&6&lCONSTUCTOR", "Korev", new String[] {
 
 			"", 
 			"" },
@@ -58,16 +61,16 @@ public enum NPCShopType {
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 					
-					InventoryShop shop = InventoryShop.lookupShop(KindItem.BUILDING_BLOCKS, NPCShopType.SHOP_BLOCKS.getName());
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.BUILDING_BLOCKS, NPCShopType.SHOP_BLOCKS.getName(), "&8¿Que desea?");
 					shop.openShop(player);
 					
 					return;
 					
 				}
 			}),
-	SHOP_BLACKSMITH("&4&lRichar", "&6&lHERRERO", " ", new String[] {
+	SHOP_BLACKSMITH("&aRicardo", "&6&lHERRERO", "papand13", new String[] {
 
-			"", 
+			"El único acero que puede traspasar mis armaduras.... es mi acero.", 
 			"" },
 
 			Material.ANVIL, new NPCAction() {
@@ -75,6 +78,8 @@ public enum NPCShopType {
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 					
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.ARMORS, NPCShopType.SHOP_BLACKSMITH.getName(), "&8¿Quiere algo en concreto?");
+					shop.openShop(player);
 					
 				}
 			}),
