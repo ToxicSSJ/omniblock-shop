@@ -175,7 +175,7 @@ public class UserShop extends AbstractShop {
 				seconds--;
 				
 				if(status == UserShopStatus.CREATED || destroyed == true) {
-					
+					waitlistPlayers.remove(player);
 					this.cancel();
 					return;
 					
@@ -233,6 +233,11 @@ public class UserShop extends AbstractShop {
 					return;
 				}
 				
+				if(player.getItemInHand().getType().equals(Material.AIR)) {
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item que usarás en la tienda puesto en tu mano.")); 
+					return;
+				}
+
 				if(ItemsProtocol.isMaterialBlocked(player.getItemInHand().getType())) {
 					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cEl item que intentas usar en la tienda está bloqueado.")); 
 					return;

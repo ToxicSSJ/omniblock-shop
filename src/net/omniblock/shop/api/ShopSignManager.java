@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -376,8 +377,20 @@ public class ShopSignManager {
 			
 		}
 		
+		@SuppressWarnings("deprecation")
 		@EventHandler
 		public void onDestroy(BlockBreakEvent e) {
+			
+			//
+			//Evitar que el cartel sea destruido por una espada en creativo
+			//
+			if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE) 
+					&& (e.getPlayer().getItemInHand().getType().equals(Material.WOOD_SWORD) 
+							|| e.getPlayer().getItemInHand().getType().equals(Material.GOLD_SWORD)
+							|| e.getPlayer().getItemInHand().getType().equals(Material.IRON_SWORD)
+							|| e.getPlayer().getItemInHand().getType().equals(Material.STONE_SWORD)
+							|| e.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_SWORD))) return;
+			
 			
 			//
 			// Verificar si el bloque es un valido

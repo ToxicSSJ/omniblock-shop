@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
@@ -101,8 +102,9 @@ public class AdminShop extends AbstractShop {
 				
 				seconds--;
 				
+				
 				if(status == AdminShopStatus.CREATED || destroyed == true) {
-					
+					waitlistPlayers.remove(player);
 					this.cancel();
 					return;
 					
@@ -150,7 +152,7 @@ public class AdminShop extends AbstractShop {
 				
 				Player player = e.getPlayer();
 				
-				if(player.getItemInHand() == null) {
+				if(player.getItemInHand().getType().equals(Material.AIR)) {
 					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item que usarás en la tienda puesto en tu mano.")); 
 					return;
 				}
