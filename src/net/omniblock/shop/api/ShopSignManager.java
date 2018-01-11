@@ -30,6 +30,7 @@ import net.omniblock.network.handlers.base.bases.type.RankBase;
 import net.omniblock.network.handlers.base.sql.util.Resolver;
 import net.omniblock.network.library.utils.LocationUtils;
 import net.omniblock.network.library.utils.TextUtil;
+import net.omniblock.network.library.utils.TileUtils;
 import net.omniblock.network.systems.rank.type.RankType;
 import net.omniblock.shop.ShopPlugin;
 import net.omniblock.shop.api.config.ConfigType;
@@ -39,7 +40,6 @@ import net.omniblock.shop.api.object.UserShop;
 import net.omniblock.shop.api.object.AbstractShop.ShopLoadStatus;
 import net.omniblock.shop.api.type.ShopActionType;
 import net.omniblock.shop.api.object.AdminShop;
-import net.omniblock.shop.utils.TileUtils;
 
 /**
  * 
