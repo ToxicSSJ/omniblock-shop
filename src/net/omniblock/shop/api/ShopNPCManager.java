@@ -21,7 +21,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
 
 import com.google.common.collect.Lists;
 
@@ -189,24 +188,29 @@ public class ShopNPCManager {
 					if(text == null) continue;
 					
 					
-					for (Entity entity : npc.getNpc().getEntity().getNearbyEntities(3, 3, 3)) {
+					for (Entity entity : npc.getNpc().getEntity().getNearbyEntities(5, 5, 5)) {
 
 						if (entity == null) continue;
 
 						if (entity instanceof Player) {
 							
 							Player p = (Player) entity;
+							LivingEntity npcEntity = (LivingEntity) npc.getNpc().getEntity();
 							
-							p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 2, 2);
-							p.sendMessage("");
-							p.sendMessage(TextUtil.format(npc.getNpctype().getName() +  "&b&l» " + "&7" + text));
-							p.sendMessage("");
+							if(EntityUtils.isLookingAtEntity(p, npcEntity)){
+								
+								p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 2, 2);
+								p.sendMessage("");
+								p.sendMessage(TextUtil.format(npc.getNpctype().getName() +  "&b&l» " + "&7" + text));
+								p.sendMessage("");
+								
+							}
 						}
 					}	
 				}
 			}
 		
-		}.runTaskTimer(ShopPlugin.getInstance(), 0L, 70L);
+		}.runTaskTimer(ShopPlugin.getInstance(), 0L, 60L);
 	}
 	
 	/**
