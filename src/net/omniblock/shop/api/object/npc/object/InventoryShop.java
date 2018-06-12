@@ -19,8 +19,8 @@ import net.omniblock.network.library.utils.InventoryUtils;
 import net.omniblock.network.library.utils.TextUtil;
 import net.omniblock.shop.api.type.AdminShopItem;
 import net.omniblock.shop.api.type.KindItem;
-import net.omniblock.shop.utils.ItemNameUtils;
 import net.omniblock.survival.base.SurvivalBankBase;
+import net.omniblock.survival.utils.ItemNameUtils;
 
 public class InventoryShop {
 

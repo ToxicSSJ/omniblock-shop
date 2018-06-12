@@ -30,8 +30,8 @@ import net.omniblock.shop.api.exception.SignLoadException;
 import net.omniblock.shop.api.type.AdminShopItem;
 import net.omniblock.shop.api.type.ShopActionType;
 import net.omniblock.shop.api.type.ShopType;
-import net.omniblock.shop.utils.ItemNameUtils;
 import net.omniblock.survival.base.SurvivalBankBase;
+import net.omniblock.survival.utils.ItemNameUtils;
 
 public class AdminShop extends AbstractShop {
 

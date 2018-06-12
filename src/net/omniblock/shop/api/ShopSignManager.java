@@ -22,9 +22,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import com.google.common.collect.Lists;
 
 import net.omniblock.network.handlers.base.bases.type.RankBase;
 import net.omniblock.network.handlers.base.sql.util.Resolver;
@@ -39,6 +36,7 @@ import net.omniblock.shop.api.object.AbstractShop;
 import net.omniblock.shop.api.object.UserShop;
 import net.omniblock.shop.api.object.AbstractShop.ShopLoadStatus;
 import net.omniblock.shop.api.type.ShopActionType;
+import net.omniblock.survival.platform.Platform;
 import net.omniblock.shop.api.object.AdminShop;
 
 /**
@@ -256,8 +254,6 @@ public class ShopSignManager {
 	 */
 	public static class ShopSignListener implements Listener {
 		
-		public static List<Player> blacklist = Lists.newArrayList();
-		
 		@EventHandler
 		public void onClick(PlayerInteractEvent e) {
 			
@@ -328,48 +324,34 @@ public class ShopSignManager {
 					// PlayerInteractEvent se puede llamar
 					// hasta 5 veces en 1 solo click.
 					// 
-					if(blacklist.contains(e.getPlayer()))
-						return;
-					
-					blacklist.add(e.getPlayer());
-					
-					new BukkitRunnable() {
+					Platform.runLater(()->{
 						
-						@Override
-						public void run() {
+						Sign sign = (Sign) e.getClickedBlock().getState();
+						
+						//
+						// Iterar todas las tiendas que
+						// ya están registradas.
+						//
+						for(AbstractShop shop : registeredShops) {
 							
-							if(blacklist.contains(e.getPlayer()))
-								blacklist.remove(e.getPlayer());
+							Block shopBlock = shop.getBlock();
+							Block block = sign.getBlock();
 							
+							if(shopBlock.equals(block)) {
+								
+								//
+								// Ejecutar el metodo de click en caso
+								// de que el bloque clickleado sea
+								// perteneciente a la tienda que se
+								// está iterando.
+								//
+								shop.clickEvent(e);
+								return;
+								
+							}	
 						}
 						
-					}.runTaskLater(ShopPlugin.getInstance(), 5L);
-					
-					Sign sign = (Sign) e.getClickedBlock().getState();
-					
-					//
-					// Iterar todas las tiendas que
-					// ya están registradas.
-					//
-					for(AbstractShop shop : registeredShops) {
-						
-						Block shopBlock = shop.getBlock();
-						Block block = sign.getBlock();
-						
-						if(shopBlock.equals(block)) {
-							
-							//
-							// Ejecutar el metodo de click en caso
-							// de que el bloque clickleado sea
-							// perteneciente a la tienda que se
-							// está iterando.
-							//
-							shop.clickEvent(e);
-							return;
-							
-						}
-						
-					}
+					}, 5);
 					
 				}
 				
@@ -638,14 +620,8 @@ public class ShopSignManager {
 								
 							} else { return; }
 					
-					}
-				
+					}		
 			}
-			
-		}
-		
-		
-		
+		}	
 	}
-	
 }
