@@ -3,6 +3,7 @@ package net.omniblock.shop.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.bukkit.Bukkit;
@@ -56,7 +57,7 @@ public class ShopSignManager {
 	
 	/**
 	 * 
-	 * Instalaci�n del sistema de tiendas.
+	 * Instalación del sistema de tiendas.
 	 * Este metodo estatico debe ser ejecutado
 	 * al iniciar el plugin.
 	 * 
@@ -66,9 +67,9 @@ public class ShopSignManager {
 		ShopPlugin.getInstance().getServer().getPluginManager().registerEvents(new ShopSignListener(), ShopPlugin.getInstance());
 		
 		//
-		// Se cargar�n a continuaci�n todos los
+		// Se cargarán a continuación todos los
 		// carteles registrados dentro de la
-		// configuraci�n.
+		// configuración.
 		//
 		
 		//
@@ -123,7 +124,7 @@ public class ShopSignManager {
 				}
 		
 		//
-		// A continuaci�n se cargar�n las tiendas
+		// A continuación se cargarán las tiendas
 		// tipo administrador.
 		//
 		if(ConfigType.SHOPDATA.getConfig().isSet("adminshop"))
@@ -163,10 +164,10 @@ public class ShopSignManager {
 	
 	/**
 	 * 
-	 * A�adir una tienda a la lista del
+	 * Añadir una tienda a la lista del
 	 * registro.
 	 * 
-	 * @param shop Tienda que se desea a�adir.
+	 * @param shop Tienda que se desea añadir.
 	 */
 	public static void addShop(AbstractShop shop) {
 		
@@ -207,7 +208,20 @@ public class ShopSignManager {
 	
 	/**
 	 * 
-	 * Con este metodo podr�s recibir el numero
+	 * Metodo para recibir todas las tiendas
+	 * registradas de un jugador
+	 * 
+	 * @return Lista AbstractShop con todas las tiendas
+	*/
+	public static List<AbstractShop> getPlayerShops(Player player) {
+		return registeredShops.stream()
+				.filter(myShop -> Bukkit.getPlayer(Resolver.getLastNameByNetworkID(myShop.getPlayerNetworkID())) == (player.getPlayer()))
+				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * 
+	 * Con este metodo podrás recibir el numero
 	 * maximo de tiendas que puede tener un usuario
 	 * en base a su rango.
 	 * 
@@ -280,7 +294,7 @@ public class ShopSignManager {
 				if(e.getClickedBlock().getState() instanceof Chest) {
 					
 					//
-					// Verificar que el cofre que se est�
+					// Verificar que el cofre que se está
 					// abriendo pertenezca a una tienda.
 					//
 					for(AbstractShop shop : registeredShops) {
@@ -289,7 +303,7 @@ public class ShopSignManager {
 						
 						//
 						// En caso de que pertenezca a una tienda verificar
-						// si quien est� abriendo el cofre es un usuario
+						// si quien está abriendo el cofre es un usuario
 						// y si lo es, verificar si es el propietario.
 						//
 						if(chestBlock.equals(e.getClickedBlock())) {
@@ -306,7 +320,7 @@ public class ShopSignManager {
 									return;
 								
 								e.setCancelled(true);
-								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cLa tienda que intentas abrir no es de tu propiedad!"));
+								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda que intentas abrir no es de tu propiedad!"));
 								return;
 							}
 							
@@ -349,7 +363,7 @@ public class ShopSignManager {
 					
 					//
 					// Iterar todas las tiendas que
-					// ya est�n registradas.
+					// ya están registradas.
 					//
 					for(AbstractShop shop : registeredShops) {
 						
@@ -362,7 +376,7 @@ public class ShopSignManager {
 							// Ejecutar el metodo de click en caso
 							// de que el bloque clickleado sea
 							// perteneciente a la tienda que se
-							// est� iterando.
+							// está iterando.
 							//
 							shop.clickEvent(e);
 							return;
@@ -404,9 +418,10 @@ public class ShopSignManager {
 				
 				//
 				// Iterar todas las tiendas para buscar
-				// si el bloque destru�do pertenece
+				// si el bloque destruído pertenece
 				// a alguna de ellas.
 				//
+				
 				for(AbstractShop shop : registeredShops) {
 					
 					Block chestBlock = shop.getChest().getBlock();
@@ -424,8 +439,8 @@ public class ShopSignManager {
 						if(shop instanceof UserShop) {
 							
 							//
-							// Si al jugador que intenta destru�r el cartel/cofre
-							// no le pertenece la tienda se cancelar� el evento.
+							// Si al jugador que intenta destruír el cartel/cofre
+							// no le pertenece la tienda se cancelará el evento.
 							//
 							if(Resolver.getLastNameByNetworkID(shop.getPlayerNetworkID()) == e.getPlayer().getName()) {
 								
@@ -434,17 +449,16 @@ public class ShopSignManager {
 								
 								ConfigType.SHOPDATA.getConfigObject().save();
 								
-								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Has &8destruido &7tu tienda correctamente!"));
+								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has &8destruido &7tu tienda correctamente!"));
 								return;
 								
 							}
 							
 							//
-							// Si quien destruy� la tienda fue un
+							// Si quien destruyó la tienda fue un
 							// miembro del Staff y este es Moderador/Ayudante
-							// se ejecutar� la acci�n y se enviar�
+							// se ejecutará la acción y se enviará
 							// el registro al Discord.
-							// TODO
 							//
 							if(e.getPlayer().isOp() || e.getPlayer().hasPermission("shop.usershop.adminbreak")) {
 								
@@ -453,7 +467,7 @@ public class ShopSignManager {
 								
 								ConfigType.SHOPDATA.getConfigObject().save();
 								
-								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Has forzado la destrucci�n de la tienda &c'" + shop.getUniqueID() + "'&7 de &8" + Resolver.getLastNameByNetworkID(shop.getPlayerNetworkID()) + "&7 correctamente!"));
+								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has forzado la destrucción de la tienda &c'" + shop.getUniqueID() + "'&7 de &8" + Resolver.getLastNameByNetworkID(shop.getPlayerNetworkID()) + "&7 correctamente!"));
 								
 								shop.destroySign();
 								return;
@@ -473,14 +487,14 @@ public class ShopSignManager {
 						if(shop instanceof AdminShop) {
 							
 							//
-							// Si quien destruy� la tienda fue un
+							// Si quien destruyó la tienda fue un
 							// miembro del Staff y este es CEO/Admin
-							// se ejecutar� la acci�n y se enviar�
+							// se ejecutará la acción y se enviará
 							// el registro al Discord.
 							//
 							if(e.getPlayer().isOp() || e.getPlayer().hasPermission("shop.adminshop.adminbreak")) {
 								
-								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Has forzado la destrucci�n de la tienda &c'" + shop.getUniqueID() + "'&7 correctamente!"));
+								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has forzado la destrucción de la tienda &c'" + shop.getUniqueID() + "'&7 correctamente!"));
 								
 								shop.destroySign();
 								return;
@@ -505,37 +519,62 @@ public class ShopSignManager {
 		public void onCreate(SignChangeEvent e) {
 			
 			//
-			// Tomar el cofre detr�s del cartel
+			// Tomar el cofre detrás del cartel
 			// en caso de que no exista dicho
-			// cofre se retornar� null.
+			// cofre se retornará null.
 			//
 			Chest chest = TileUtils.getChestBehindSign((Sign) e.getBlock().getState());
-			
+
 			if(chest == null || e.getLines().length < 3)
 				return;
 			
+			/*
+			 *Mensaje de ayuda
+			 */
+			String[] help = new String[] {
+					
+					"",
+					TextUtil.format("&r&6&l&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"),
+					TextUtil.getCenteredMessage("&r&aPara crear una tienda el letrero debe", true),
+					TextUtil.getCenteredMessage("&r&acumplir con el siguiente formato.", true),
+					TextUtil.getCenteredMessage("&r&e&m---------------------", true),
+					TextUtil.getCenteredMessage("&r&e"+LineRegex.CREATE_USER_SHOP_UP.toUpperCase(), true),
+					TextUtil.getCenteredMessage("&r&e[COMPRAR] ó [VENDER]", true),
+					TextUtil.getCenteredMessage("&r&e   PRECIO DEL ITEM", true),
+					"",
+					TextUtil.getCenteredMessage("&r&e&m---------------------", true),
+					TextUtil.format("&r&6&l&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"),
+					""
+					
+			};
+			
 			//
-			// El cartel en caso de ser un Usuario funcionar� de la siguiente
+			// El cartel en caso de ser un Usuario funcionará de la siguiente
 			// manera:
 			// 
 			// [TIENDA]             			| Prefijo tienda.
 			// [COMPRAR / VENDER]   			| El tipo de tienda (compra o venta).
-			// [PRECIO]							| El precio que se le dar� a cada unidad.
+			// [PRECIO]							| El precio que se le dará a cada unidad.
 			//
 			if(e.getLine(0).equalsIgnoreCase(LineRegex.CREATE_USER_SHOP_UP)){
 
-				if(e.getLine(1).equalsIgnoreCase(LineRegex.CREATE_BUY_SHOP_MIDDLE) || e.getLine(1).equalsIgnoreCase(LineRegex.CREATE_SELL_SHOP_MIDDLE)) {
+				if(e.getLine(1).equalsIgnoreCase(LineRegex.CREATE_BUY_SHOP_MIDDLE)
+						|| e.getLine(1).equalsIgnoreCase(LineRegex.CREATE_SELL_SHOP_MIDDLE)) {
 					
 					//
-					// Verificar que la linea 3 se est�
+					// Verificar que la linea 3 se está
 					// utilizando para el precio.
 					//
-					if(!NumberUtils.isNumber(e.getLine(2)))
+					if(!NumberUtils.isNumber(e.getLine(2))){
+						help[6] = TextUtil.getCenteredMessage("&r&e"+e.getLine(1).toUpperCase(), true);
+						e.getPlayer().sendMessage(help);
+						
 						return;
+					}
 					
 					//
 					// Verificar que el cofre con el cual
-					// se est� creando la tienda no est�
+					// se está creando la tienda no esté
 					// siendo utilizando por otra.
 					//
 					for(AbstractShop shop : registeredShops) {
@@ -544,15 +583,25 @@ public class ShopSignManager {
 					
 						if(chestBlock.equals(chest.getBlock())) {
 							
-							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cYa se ha creado una tienda en este lugar!"));
+							e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cYa se ha creado una tienda en este lugar!"));
 							
 							e.setCancelled(true);
 							e.getBlock().breakNaturally();
 							return;
-							
 						}
 					
 					}
+					
+					//Verificar que el usuario no halla rebasado su limite de tiendas
+					if(getPlayerShops(e.getPlayer()).size() >= getMaxShopsByRank(e.getPlayer())){
+						
+						e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cHas superado tu limite disponible de tiendas."));
+						
+						e.setCancelled(true);
+						e.getBlock().breakNaturally();
+						return;
+					}
+					
 					
 					UserShop shop = new UserShop(
 							(Sign) e.getBlock().getState(),
@@ -567,12 +616,14 @@ public class ShopSignManager {
 					
 					return;
 					
+					
 				}
 				
+				e.getPlayer().sendMessage(help);
 			}
 			
 			//
-			// El cartel en caso de ser tipo Admin funcionar� de la siguiente
+			// El cartel en caso de ser tipo Admin funcionará de la siguiente
 			// manera:
 			// 
 			// [ADMIN]             			| Prefijo tienda.
@@ -626,12 +677,12 @@ public class ShopSignManager {
 							if(!Resolver.getLastNameByNetworkID(shop.getPlayerNetworkID()).equals(e.getPlayer().getName())) {
 								
 								//
-								// En caso de que el usuario no sea el due�o
+								// En caso de que el usuario no sea el dueño
 								// de la tienda cancelar el evento y enviarle
 								// un mensaje.
 								//
 								
-								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cNo puedes colocar tolvas alrededor de las tiendas de los dem�s usuarios!"));
+								e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo puedes colocar tolvas alrededor de las tiendas de los demás usuarios!"));
 								e.setBuild(false);
 								e.setCancelled(true);
 								return;
