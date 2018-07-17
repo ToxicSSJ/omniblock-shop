@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Omniblock-Shop:jar">
+    <output-path>$PROJECT_DIR$/../CompiledJars</output-path>
+    <root id="archive" name="Omniblock-Shop.jar">
+      <element id="module-output" name="Omniblock-Shop" />
+      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+    </root>
+  </artifact>
+</component>

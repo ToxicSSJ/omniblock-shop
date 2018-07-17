@@ -46,8 +46,8 @@ public class NPCShop {
 	 * 
 	 * @param NPCShopType Se define que tipo de NPC se creara o se utilizara.
 	 * @param String Identidad unica de la tienda. 
-	 * @param Location Localización donde se spawnea el NPC.
-	 * @param Location Localización a la que mirará el NPC.
+	 * @param Location Localizaciï¿½n donde se spawnea el NPC.
+	 * @param Location Localizaciï¿½n a la que mirarï¿½ el NPC.
 	 * 
 	 */
 	public NPCShop(NPCShopType type, String uniqueID, Location location, Location lookAt) {
@@ -135,8 +135,8 @@ public class NPCShop {
 	/**
 	 * 
 	 * Metodo para destruir una tienda
-	 * con todos sus elementos, también
-	 * lo borrará de la configuración.
+	 * con todos sus elementos, tambiï¿½n
+	 * lo borrar de la configuracion.
 	 * 
 	 */
 	public void destroy() {
@@ -162,7 +162,7 @@ public class NPCShop {
 	}
 
 	/**
-	 * Con este método se obtiene los dialogos de los NPCs.
+	 * Con este mï¿½todo se obtiene los dialogos de los NPCs.
 	 * 
 	 */
 	public String[] getDialogs() {
@@ -261,7 +261,7 @@ public class NPCShop {
 	
 	/**
 	 * 
-	 * Interface donde se realiza la acción del NPC.
+	 * Interface donde se realiza la acciï¿½n del NPC.
 	 * 
 	 */
 	public static interface NPCAction {

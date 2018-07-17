@@ -11,15 +11,15 @@ public enum NPCShopType {
 
 	DEFAULT("Ciudadano", "", new String[] {
 
-			"¡Woow, que hermosas vistas tengo aquí, nunca me iría de esta ciudad!",
-			"¡Todos los días aumentas esos estúpidos impuestos, parece que quieren dejar al pueblo pobre!",
-			"¡Está muy tranquila la ciudad hoy en día!" },
+			"Woow, que hermosas vistas tengo aquÃ­, nunca me irÃ¡a de esta ciudad!",
+			"Todos los dÃ­as aumentas esos estÃºpidos impuestos, parece que quieren dejar al pueblo pobre!",
+			"EstÃ¡ muy tranquila la ciudad hoy en dÃ­a!" },
 
 			Material.EMERALD, null),
 	SHOP_FOOD("&aAlex", "&6&lALIMENTOS", "scarfguy", new String[] {
 
-			"¡Bienvenido! compre los más ricos panes de la ciudad!",
-			"¡Panes frescos y crujientes solo en este local!",
+			"Bienvenido! compre los mÃ¡s ricos panes de la ciudad!",
+			"Panes frescos y crujientes solo en este local!",
 			"Recuerda tener una dieta equilibrada."},
 
 			Material.BREAD, new NPCAction() {
@@ -27,7 +27,7 @@ public enum NPCShopType {
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 				
-					InventoryShop shop = InventoryShop.lookupShop(KindItem.FOODSTUFFS, NPCShopType.SHOP_FOOD.getName(), "&8¿Busca algo en particular?");
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.FOODSTUFFS, NPCShopType.SHOP_FOOD.getName(), "&8ï¿½Busca algo en particular?");
 					shop.openShop(player);
 					
 					return;
@@ -36,32 +36,35 @@ public enum NPCShopType {
 			}),
 	SHOP_MATERIALS("&aJuan", "&6&lMINERO", "qrj", new String[] {
 
-			"¡Piedras preciosas a buen precio!", 
-			"¡Acércate y mira nuestra galería de cosas únicas para ti!",
-			"¡Los materiales son de primerísima calidad!",
-			"Tu pon el dinero, yo te pongo el material que necesitas."},
+			"Acercate y mira nuestra galeria de cosas unicas para ti!",
+			"Los materiales son de primerÃ­sima calidad!",
+			"Tu pon el dinero, yo te pongo el material que necesitas.",
+			"Compra tus herramientas al mejor precio."},
 
 			Material.DIAMOND_PICKAXE, new NPCAction() {
 
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 
-					
-					
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.TOOLS, NPCShopType.SHOP_MATERIALS.getName(), "&8Â¿Quiere algo en concreto?");
+					shop.openShop(player);
+
+					return;
 				}
 				
 			}),
 	SHOP_BLOCKS("&aPedro", "&6&lCONSTUCTOR", "Korev", new String[] {
 
-			"", 
-			"" },
+			"Todos los materiales que necesitas, ven y compra",
+			"Todos los materiales que necesitas, ven y compra",
+			"Los mejores bloques de todo Omniblock..."},
 
 			Material.BRICK, new NPCAction() {
 
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 					
-					InventoryShop shop = InventoryShop.lookupShop(KindItem.BUILDING_BLOCKS, NPCShopType.SHOP_BLOCKS.getName(), "&8¿Que desea?");
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.BUILDING_BLOCKS, NPCShopType.SHOP_BLOCKS.getName(), "&8Â¿Que desea?");
 					shop.openShop(player);
 					
 					return;
@@ -70,7 +73,7 @@ public enum NPCShopType {
 			}),
 	SHOP_BLACKSMITH("&aRicardo", "&6&lHERRERO", "papand13", new String[] {
 
-			"El único acero que puede traspasar mis armaduras.... es mi acero.", 
+			"El Ãºnico acero que puede traspasar mis armaduras.... es mi acero.",
 			"" },
 
 			Material.ANVIL, new NPCAction() {
@@ -78,7 +81,7 @@ public enum NPCShopType {
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 					
-					InventoryShop shop = InventoryShop.lookupShop(KindItem.ARMORS, NPCShopType.SHOP_BLACKSMITH.getName(), "&8¿Quiere algo en concreto?");
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.ARMORS, NPCShopType.SHOP_BLACKSMITH.getName(), "&8Â¿Quiere algo en concreto?");
 					shop.openShop(player);
 					
 				}
@@ -100,15 +103,15 @@ public enum NPCShopType {
 	 * @param name
 	 *            Nombre que tendra el NPC.
 	 * @param professionName
-	 *            Nombre de la profesión que tendrá el NPC.
+	 *            Nombre de la profesiï¿½n que tendrï¿½ el NPC.
 	 * @param skin
 	 *            Nombre de la skin que se va a utilizar.
 	 * @param npcDialogs
 	 *            Dialogos de los NPCs.
 	 * @param material
-	 *            Material que representa su profesión.
+	 *            Material que representa su profesiï¿½n.
 	 * @param action
-	 *            Acción que se realizara al hundir click al NPC.
+	 *            Acciï¿½n que se realizara al hundir click al NPC.
 	 * 
 	 */
 	NPCShopType(String name, String professionName, String skin, String[] npcDialogs, Material material,

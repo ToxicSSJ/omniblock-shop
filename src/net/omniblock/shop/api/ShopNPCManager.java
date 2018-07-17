@@ -45,7 +45,7 @@ public class ShopNPCManager {
 
 	/**
 	 *
-	 * Se preparará toda la tienda de los NPCs.
+	 * Se prepararï¿½ toda la tienda de los NPCs.
 	 * 
 	 */
 	public static void setup() {
@@ -70,9 +70,9 @@ public class ShopNPCManager {
 			public void run() {
 				
 				//
-				// Se cargarán a continuación todos las
+				// Se cargarï¿½n a continuaciï¿½n todos las
 				// tiendas tipo NPC que se encuentran dentro
-				// de la configuración.
+				// de la configuraciï¿½n.
 				//
 				if(ConfigType.SHOP_NPC_DATA.getConfig().isSet("npcshop"))
 					if(ConfigType.SHOP_NPC_DATA.getConfig().isConfigurationSection("npcshop"))
@@ -166,7 +166,7 @@ public class ShopNPCManager {
 	
 	/**
 	 * 
-	 * Este metodo devolverá la lista de los
+	 * Este metodo devolverï¿½ la lista de los
 	 * npc registrados y funcionales del sistema.
 	 * 
 	 * @return La lista de los npc registrados.
@@ -176,37 +176,38 @@ public class ShopNPCManager {
 	}
 	
 	public static  void makeIA() {
-		
+
 		task = new BukkitRunnable() {
-			
+
 			@Override
 			public void run() {
-				
+
 				for(NPCShop npc : registeredNPCs) {
-					
-					String text = npc.getDialogs()[NumberUtil.getRandomInt(0, npc.getDialogs().length - 1)]; 
-					
+
+					String text = npc.getDialogs()[NumberUtil.getRandomInt(0, npc.getDialogs().length - 1)];
+
 					if(text == null) continue;
-					
-					
+
+
 					for (Entity entity : npc.getNpc().getEntity().getNearbyEntities(3, 3, 3)) {
 
 						if (entity == null) continue;
 
 						if (entity instanceof Player) {
-							
+
 							Player p = (Player) entity;
-							
+
 							p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_YES, 2, 2);
 							p.sendMessage("");
-							p.sendMessage(TextUtil.format(npc.getNpctype().getName() +  "&b&l» " + "&7" + text));
+							p.sendMessage(TextUtil.format(npc.getNpctype().getName() +  "&b&l " + "&7" + text));
 							p.sendMessage("");
 						}
-					}	
+					}
 				}
 			}
-		
-		}.runTaskTimer(ShopPlugin.getInstance(), 0L, 70L);
+
+		}.runTaskTimer(ShopPlugin.getInstance(), 0L, 210L);
+
 	}
 	
 	/**
@@ -282,7 +283,7 @@ public class ShopNPCManager {
 				
 				if(shop == null || shop.isDestroyed()) {
 					
-					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda que intentas modificar ya ha sido destruida por otra persona, se ha deseleccionado."));
+					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cLa tienda que intentas modificar ya ha sido destruida por otra persona, se ha deseleccionado."));
 					selectedNPC.remove(player);
 					return true;
 					
@@ -291,7 +292,7 @@ public class ShopNPCManager {
 				if(args.length == 1)
 					if(args[0].equalsIgnoreCase("deseleccionar")) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas deseleccionado la tienda &7'" + shop.getNpctype().name() + "' &acorrectamente!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &aHas deseleccionado la tienda &7'" + shop.getNpctype().name() + "' &acorrectamente!"));
 						selectedNPC.remove(player);
 						return true;
 						
@@ -300,7 +301,7 @@ public class ShopNPCManager {
 				if(args.length == 1)
 					if(args[0].equalsIgnoreCase("destruir")) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas destruido la tienda &c'" + shop.getNpctype().name() + "' &acorrectamente!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &aHas destruido la tienda &c'" + shop.getNpctype().name() + "' &acorrectamente!"));
 						
 						shop.destroy();
 						
@@ -315,7 +316,7 @@ public class ShopNPCManager {
 				if(args.length == 1)
 					if(args[0].equalsIgnoreCase("mover")) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas movido la tienda &7'" + shop.getNpctype().name() + "' &aa tu posición correctamente!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &aHas movido la tienda &7'" + shop.getNpctype().name() + "' &aa tu posiciï¿½n correctamente!"));
 						
 						shop.move(player.getLocation(), EntityUtils.getBlockAtLooking(player, 10).getLocation());
 						return true;
@@ -329,26 +330,26 @@ public class ShopNPCManager {
 						
 						if(type == null) {
 							
-							sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cEl tipo de tienda &6'" + args[1] + "' &ano es una tienda valida!"));
+							sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cEl tipo de tienda &6'" + args[1] + "' &ano es una tienda valida!"));
 							return true;
 							
 						}
 						
 						if(type.equals(shop.getNpctype())) {
 							
-							sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cYa la tienda es del tipo &7'" + args[1] + "'&c!"));
+							sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cYa la tienda es del tipo &7'" + args[1] + "'&c!"));
 							return true;
 							
 						}
 						
 						if(existsNPCShop(type)) {
 							
-							sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cYa la tienda tipo &6'" + args[1] + "' &cestá registrada por el sistema, no puedes duplicarla!"));
+							sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cYa la tienda tipo &6'" + args[1] + "' &cestï¿½ registrada por el sistema, no puedes duplicarla!"));
 							return true;
 							
 						}
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas cambiado la tienda &8'" + shop.getNpctype().name() + "' &aal tipo &b'" + args[1] + "'&a correctamente!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &aHas cambiado la tienda &8'" + shop.getNpctype().name() + "' &aal tipo &b'" + args[1] + "'&a correctamente!"));
 						
 						shop.destroy();
 						
@@ -364,10 +365,10 @@ public class ShopNPCManager {
 				
 				sender.sendMessage(CommandPatcher.BAR);
 				sender.sendMessage(TextUtil.format(" &cERROR: &7Comando no valido."));
-				sender.sendMessage(TextUtil.format(" &8» &7Tus comandos disponibles son:"));
+				sender.sendMessage(TextUtil.format(" &8ï¿½ &7Tus comandos disponibles son:"));
 				sender.sendMessage(TextUtil.format(" &b/shopnpc cambiar [tipo] &e- &7Cambia el tipo de la tienda seleccionada."));
 				sender.sendMessage(TextUtil.format(" &b/shopnpc destruir &e- &7Destruye la tienda seleccionada."));
-				sender.sendMessage(TextUtil.format(" &b/shopnpc mover &e- &7Mover el npc seleccionado a tu pocisión."));
+				sender.sendMessage(TextUtil.format(" &b/shopnpc mover &e- &7Mover el npc seleccionado a tu pocisiï¿½n."));
 				sender.sendMessage(TextUtil.format(" &b/shopnpc deseleccionar &e- &7Deselecciona la tienda actual."));
 				sender.sendMessage(CommandPatcher.BAR);
 				return true;
@@ -382,14 +383,14 @@ public class ShopNPCManager {
 					
 					if(type == null) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cEl tipo de tienda &6'" + args[1] + "' &ano es una tienda valida!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cEl tipo de tienda &6'" + args[1] + "' &ano es una tienda valida!"));
 						return true;
 						
 					}
 					
 					if(!existsNPCShop(type)) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda tipo &6'" + args[1] + "' &c no ha sido creada!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cLa tienda tipo &6'" + args[1] + "' &c no ha sido creada!"));
 						return true;
 						
 					}
@@ -398,7 +399,7 @@ public class ShopNPCManager {
 						if(cacheShop.getNpctype().equals(type))
 							shop = cacheShop;
 					
-					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas seleccionado la tienda &b'" + shop.getNpctype().name() + "' &acorrectamente!"));
+					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &aHas seleccionado la tienda &b'" + shop.getNpctype().name() + "' &acorrectamente!"));
 					selectedNPC.put(player, shop);
 					return true;
 					
@@ -425,12 +426,12 @@ public class ShopNPCManager {
 					
 					if(cacheNPC == null) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo se ha detectado ninguna tienda en tu campo de visión!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cNo se ha detectado ninguna tienda en tu campo de visiï¿½n!"));
 						return true;
 						
 					}
 					
-					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas seleccionado la tienda &b'" + cacheNPC.getNpctype().name() + "' &acorrectamente!"));
+					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &aHas seleccionado la tienda &b'" + cacheNPC.getNpctype().name() + "' &acorrectamente!"));
 					selectedNPC.put(player, cacheNPC);
 					return true;
 					
@@ -444,14 +445,14 @@ public class ShopNPCManager {
 					
 					if(type == null) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cEl tipo de tienda &6'" + args[1] + "' &ano es una tienda valida!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cEl tipo de tienda &6'" + args[1] + "' &ano es una tienda valida!"));
 						return true;
 						
 					}
 					
 					if(!existsNPCShop(type)) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda tipo &6'" + args[1] + "' &c no ha sido creada!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cLa tienda tipo &6'" + args[1] + "' &c no ha sido creada!"));
 						return true;
 						
 					}
@@ -461,7 +462,7 @@ public class ShopNPCManager {
 							shop = cacheShop;
 					
 					player.teleport(shop.getLocation());
-					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas sido teletransportado a la tienda &7'" + args[1] + "' &acorrectamente!"));
+					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &aHas sido teletransportado a la tienda &7'" + args[1] + "' &acorrectamente!"));
 					return true;
 					
 				}
@@ -471,11 +472,11 @@ public class ShopNPCManager {
 					
 					sender.sendMessage(CommandPatcher.BAR);
 					sender.sendMessage(TextUtil.format(""));
-					sender.sendMessage(TextUtil.format(" &8» &7Variables importantes:"));
+					sender.sendMessage(TextUtil.format(" &8ï¿½ &7Variables importantes:"));
 					sender.sendMessage(TextUtil.format(" &a&lVERDE &e- &7Tienda creada."));
-					sender.sendMessage(TextUtil.format(" &c&lROJO &e- &7Tienda aún no creada."));
+					sender.sendMessage(TextUtil.format(" &c&lROJO &e- &7Tienda aï¿½n no creada."));
 					sender.sendMessage(TextUtil.format(""));
-					sender.sendMessage(TextUtil.format(" &8» &7Todas las tiendas se mostrarán a continuación:"));
+					sender.sendMessage(TextUtil.format(" &8ï¿½ &7Todas las tiendas se mostrarï¿½n a continuaciï¿½n:"));
 					
 					List<String> shops = Lists.newArrayList();
 					
@@ -498,19 +499,19 @@ public class ShopNPCManager {
 					
 					if(type == null) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cEl tipo de tienda &6'" + args[1] + "' &ano es una tienda valida!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cEl tipo de tienda &6'" + args[1] + "' &ano es una tienda valida!"));
 						return true;
 						
 					}
 					
 					if(existsNPCShop(type)) {
 						
-						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cYa la tienda tipo &6'" + args[1] + "' &cestá registrada por el sistema, no puedes duplicarla!"));
+						sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &cYa la tienda tipo &6'" + args[1] + "' &cestï¿½ registrada por el sistema, no puedes duplicarla!"));
 						return true;
 						
 					}
 					
-					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas creado y &nseleccionado&r&a la tienda &b'" + args[1] + "' &acorrectamente!"));
+					sender.sendMessage(TextUtil.format("&8&lT&8iendas &b&lï¿½ &aHas creado y &nseleccionado&r&a la tienda &b'" + args[1] + "' &acorrectamente!"));
 					
 					NPCShop newShop = new NPCShop(type, UUID.randomUUID().toString().substring(0, 10), player.getLocation(), EntityUtils.getBlockAtLooking(player, 10).getLocation());
 					
@@ -524,12 +525,12 @@ public class ShopNPCManager {
 			
 			sender.sendMessage(CommandPatcher.BAR);
 			sender.sendMessage(TextUtil.format(" &cERROR: &7Comando no valido."));
-			sender.sendMessage(TextUtil.format(" &8» &7Tus comandos disponibles son:"));
-			sender.sendMessage(TextUtil.format(" &b/shopnpc seleccionar &e- &7Selecciona la tienda que estás mirando."));
+			sender.sendMessage(TextUtil.format(" &8ï¿½ &7Tus comandos disponibles son:"));
+			sender.sendMessage(TextUtil.format(" &b/shopnpc seleccionar &e- &7Selecciona la tienda que estï¿½s mirando."));
 			sender.sendMessage(TextUtil.format(" &b/shopnpc seleccionar [tipo] &e- &7Selecciona la tienda especificada."));
-			sender.sendMessage(TextUtil.format(" &b/shopnpc lista &e- &7Te mostrará la lista de todos las tiendas, en verde los ya creados, en rojo los aún faltantes."));
+			sender.sendMessage(TextUtil.format(" &b/shopnpc lista &e- &7Te mostrarï¿½ la lista de todos las tiendas, en verde los ya creados, en rojo los aï¿½n faltantes."));
 			sender.sendMessage(TextUtil.format(" &b/shopnpc crear [tipo] &e- &7Crea una tienda en el lugar donde estas."));
-			sender.sendMessage(TextUtil.format(" &b/shopnpc tp [tipo] &e- &7Te teletransportará al tipo de NPC especificado."));
+			sender.sendMessage(TextUtil.format(" &b/shopnpc tp [tipo] &e- &7Te teletransportarï¿½ al tipo de NPC especificado."));
 			sender.sendMessage(CommandPatcher.BAR);
 			return true;
 			
