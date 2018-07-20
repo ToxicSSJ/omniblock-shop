@@ -3,6 +3,7 @@ package net.omniblock.shop.api.object.npc.object;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.omniblock.network.library.helpers.inventory.paginator.PaginatorStyle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -12,7 +13,6 @@ import net.omniblock.network.library.helpers.ItemBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder;
 import net.omniblock.network.library.helpers.inventory.InventoryBuilder.Action;
 import net.omniblock.network.library.helpers.inventory.paginator.InventoryPaginator;
-import net.omniblock.network.library.helpers.inventory.paginator.InventoryPaginator.PaginatorStyle;
 import net.omniblock.network.library.helpers.inventory.paginator.InventorySlotter;
 import net.omniblock.network.library.helpers.inventory.paginator.InventorySlotter.SlotLocatorType;
 import net.omniblock.network.library.utils.InventoryUtils;
@@ -38,8 +38,8 @@ public class InventoryShop {
 	private static final String[] itemLore = 
 			
 			new String[] {
-			TextUtil.format("&8- &7Es una gran elección,"),
-			TextUtil.format("&7además; lo tengo"),
+			TextUtil.format("&8- &7Es una gran elecciï¿½n,"),
+			TextUtil.format("&7ademï¿½s; lo tengo"),
 			TextUtil.format("&7al mejor precio.")};
 
 	/**
@@ -48,7 +48,7 @@ public class InventoryShop {
 	 * @param npcName
 	 *            El nombre que tiene el NPC.
 	 * @param player
-	 *            El jugador que abrió el inventario.
+	 *            El jugador que abriï¿½ el inventario.
 	 * @param inventoryName
 	 *            Nombre del inventario.
 	 * 
@@ -112,7 +112,7 @@ public class InventoryShop {
 	}
 
 	/**
-	 * Sistema de compra de ítems del NPC.
+	 * Sistema de compra de ï¿½tems del NPC.
 	 * 
 	 */
 	public void openShop(Player player) {
@@ -124,10 +124,10 @@ public class InventoryShop {
 
 
 	/**
-	 * Hacer la venta y compra de algún item.
+	 * Hacer la venta y compra de algï¿½n item.
 	 * 
 	 * @param item Tipo de item seleccionado.
-	 * @param player Jugador que interactúa con la GUI. 
+	 * @param player Jugador que interactï¿½a con la GUI. 
 	 * @param priceBuy Precio de compra del ITEM.
 	 * @param priceSell Precio de venta del ITEM.
 	 * @param click Tipo de click que se ejecuto en la GUI.
@@ -152,14 +152,14 @@ public class InventoryShop {
 			if(money < priceBuy) {
 				
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
-				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Te hacen falta &c$" + (priceBuy - money) + " &7para poder comprar &f&l" + itemShop + " &7 en esta tienda!")); 
+				player.sendMessage(TextUtil.format(this.npcName + "&b&lï¿½ &7Te hacen falta &c$" + (priceBuy - money) + " &7para poder comprar &f&l" + itemShop + " &7 en esta tienda!")); 
 				return;
 			
 			}
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build());
-			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy + "."));
+			player.sendMessage(TextUtil.format(this.npcName + "&b&lï¿½ &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy + "."));
 			SurvivalBankBase.removeMoney(player, priceBuy);
 			return;
 			
@@ -172,7 +172,7 @@ public class InventoryShop {
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(maxStackSpace).data(item.getData()).build());
-			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" +  maxStackSpace  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
+			player.sendMessage(TextUtil.format(this.npcName + "&b&lï¿½ &7Has comprado &f&lx" +  maxStackSpace  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
 			SurvivalBankBase.addMoney(player, priceMaxAmount);
 			
 			return;
@@ -184,14 +184,14 @@ public class InventoryShop {
 			if(avaiableAmount - 1 <= 0) {
 				
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
-				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &cNo tienes " + ItemNameUtils.getMaterialName(item.getMaterial()) + "&c en el inventario.")); 
+				player.sendMessage(TextUtil.format(this.npcName + "&b&lï¿½ &cNo tienes " + ItemNameUtils.getMaterialName(item.getMaterial()) + "&c en el inventario.")); 
 				return;
 			
 			}
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), sellAmount);
-			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has vendido "  + "&8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceSell + "!"));
+			player.sendMessage(TextUtil.format(this.npcName + "&b&lï¿½ &7Has vendido "  + "&8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceSell + "!"));
 			SurvivalBankBase.addMoney(player, priceSell);
 			return;
 		}
@@ -205,7 +205,7 @@ public class InventoryShop {
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), amount);
-			player.sendMessage(TextUtil.format(this.npcName + " &b&l» &7Has vendido &f&lx" + amount  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + sellItem + "!"));
+			player.sendMessage(TextUtil.format(this.npcName + " &b&lï¿½ &7Has vendido &f&lx" + amount  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + sellItem + "!"));
 			SurvivalBankBase.addMoney(player, sellItem);
 			return;
 		}
@@ -225,11 +225,11 @@ public class InventoryShop {
 	
 	/**
 	 * 
-	 * Este metodo buscará una tienda registrada
+	 * Este metodo buscarï¿½ una tienda registrada
 	 * con las caracteristicas dadas, en caso
 	 * de que no se logre encontrar dicha tienda
-	 * simplemente se creará una nueva y posteriormente
-	 * se registrará para futuras busquedas.
+	 * simplemente se crearï¿½ una nueva y posteriormente
+	 * se registrarï¿½ para futuras busquedas.
 	 * 
 	 * @param kind Tipo de tienda.
 	 * @param npcname El nombre del npc que atienda

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.omniblock.shop.ShopExecutor;
+import net.omniblock.shop.ShopGUIExecutor;
+import net.omniblock.survival.systems.commands.gui.RegisterGUI;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -45,7 +48,7 @@ public class ShopNPCManager {
 
 	/**
 	 *
-	 * Se preparar� toda la tienda de los NPCs.
+	 * Se preparara toda la tienda de los NPCs.
 	 * 
 	 */
 	public static void setup() {
@@ -55,7 +58,18 @@ public class ShopNPCManager {
 		
 		ShopPlugin.getInstance().getServer().getPluginManager().registerEvents(new InventoryBuilderListener(), 
 				ShopPlugin.getInstance());
-		
+
+		RegisterGUI.registerGUI(new ShopGUIExecutor());
+
+		ShopExecutor executor = new ShopExecutor();
+		String[] commands = new String[]{
+				"tienda",
+				"shop"
+
+		};
+		for(String command : commands)
+			ShopPlugin.getInstance().getCommand(command).setExecutor(executor);
+
 		ShopPlugin.getInstance().getCommand("shopnpc").setExecutor(new ShopNPCExecutor());
 		
 		//

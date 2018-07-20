@@ -53,7 +53,7 @@ public enum NPCShopType {
 				}
 				
 			}),
-	SHOP_BLOCKS("&aPedro", "&6&lCONSTUCTOR", "Korev", new String[] {
+	SHOP_BLOCKS("&aBob", "&6&lCONSTRUCTOR", "Korev", new String[] {
 
 			"Todos los materiales que necesitas, ven y compra",
 			"Todos los materiales que necesitas, ven y compra",

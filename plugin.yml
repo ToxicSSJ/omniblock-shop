@@ -6,3 +6,7 @@ website: www.omniblock.net
 commands:
    shopnpc:
       description: Comando principal para el manejo de los npcs de las tiendas.
+   shop:
+      description: Comando principal para el manejo de las tiendas.
+   tienda:
+      description: Comando principal para el manejo de las tiendas.
