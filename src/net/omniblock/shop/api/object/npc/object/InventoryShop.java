@@ -173,7 +173,7 @@ public class InventoryShop {
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(maxStackSpace).data(item.getData()).build());
 			player.sendMessage(TextUtil.format(this.npcName + "&b&l� &7Has comprado &f&lx" +  maxStackSpace  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
-			SurvivalBankBase.addMoney(player, priceMaxAmount);
+			SurvivalBankBase.removeMoney(player, priceMaxAmount);
 			
 			return;
 			
