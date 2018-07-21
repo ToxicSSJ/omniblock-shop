@@ -160,6 +160,7 @@ public class InventoryShop {
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build());
 			player.sendMessage(TextUtil.format(this.npcName + "&b&l� &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy + "."));
+
 			SurvivalBankBase.removeMoney(player, priceBuy);
 			return;
 			
