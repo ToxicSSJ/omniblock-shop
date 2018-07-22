@@ -170,6 +170,14 @@ public class InventoryShop {
 
 			
 			int priceMaxAmount = maxStackSpace * priceBuy;
+
+			if(money < priceMaxAmount) {
+
+				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
+				player.sendMessage(TextUtil.format(this.npcName + "&b&l� &7Te hacen falta &c$" + (priceMaxAmount - money) + " &7para poder comprar &f&l" + itemShop + " &7 en esta tienda!"));
+				return;
+
+			}
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(maxStackSpace).data(item.getData()).build());

@@ -55,9 +55,6 @@ public class ShopNPCManager {
 
 		ShopPlugin.getInstance().getServer().getPluginManager().registerEvents(new ShopNPCListener(),
 				ShopPlugin.getInstance());
-		
-		ShopPlugin.getInstance().getServer().getPluginManager().registerEvents(new InventoryBuilderListener(), 
-				ShopPlugin.getInstance());
 
 		RegisterGUI.registerGUI(new ShopGUIExecutor());
 
