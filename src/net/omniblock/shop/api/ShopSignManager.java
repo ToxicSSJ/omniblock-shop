@@ -238,7 +238,7 @@ public class ShopSignManager {
 			return 1000;
 		case BNF:
 			return 500;
-		case CEO:
+		case DIRECTOR:
 			return 1000;
 		case GM:
 			return 500;

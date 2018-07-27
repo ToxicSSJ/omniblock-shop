@@ -5,6 +5,7 @@ import net.omniblock.network.systems.CommandPatcher;
 import net.omniblock.shop.api.object.npc.object.InventoryShop;
 import net.omniblock.shop.api.type.KindItem;
 import net.omniblock.shop.api.type.NPCShopType;
+import net.omniblock.survival.utils.HelpUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -63,14 +64,17 @@ public class ShopExecutor implements CommandExecutor {
 
 					}
 
+				/*
 				sender.sendMessage(CommandPatcher.BAR);
 				sender.sendMessage(TextUtil.format(" &cERROR: &7Comando no valido."));
 				sender.sendMessage(TextUtil.format(" &7Tus comandos disponibles son:"));
-				sender.sendMessage(TextUtil.format(" &b/tienda seleccionar [tipo] &e- &7Selecciona la tienda especificada."));
+				sender.sendMessage(TextUtil.format(" &b/tienda <tipo> &e- &7Selecciona la tienda especificada."));
 				sender.sendMessage(TextUtil.format(""));
 				sender.sendMessage(TextUtil.format(" &7Las tiendas disponibles son:"));
 				sender.sendMessage(TextUtil.format(" &e- &aBloques, comidas, armas."));
 				sender.sendMessage(CommandPatcher.BAR);
+				*/
+				HelpUtil.cmdFormat(player, "/tienda <bloques | comida | armas>", "/tienda bloques");
 				return true;
 
 			}
