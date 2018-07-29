@@ -1,7 +1,5 @@
 package net.omniblock.shop;
 
-import net.omniblock.network.library.utils.TextUtil;
-import net.omniblock.network.systems.CommandPatcher;
 import net.omniblock.shop.api.object.npc.object.InventoryShop;
 import net.omniblock.shop.api.type.KindItem;
 import net.omniblock.shop.api.type.NPCShopType;

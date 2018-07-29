@@ -14,10 +14,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import com.gmail.filoghost.holographicdisplays.api.line.ItemLine;
-
 import net.omniblock.network.library.helpers.ItemBuilder;
 import net.omniblock.network.library.utils.InventoryUtils;
 import net.omniblock.network.library.utils.TextUtil;

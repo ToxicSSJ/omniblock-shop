@@ -50,7 +50,7 @@ public enum AdminShopItem {
 	DARK_LOG2(KindItem.BUILDING_BLOCKS, Material.LOG_2, 1, 10, 1),
 
 	SPONGE(KindItem.BUILDING_BLOCKS, Material.SPONGE, 50, 15),
-	WET_SPONGE(KindItem.BUILDING_BLOCKS, Material.SPONGE, 1, 0, 10),
+	WET_SPONGE(KindItem.BUILDING_BLOCKS, Material.SPONGE, 1, 50, 15),
 
 	GLASS(KindItem.BUILDING_BLOCKS, Material.GLASS, 10, 4),
 	SAND_STONE(KindItem.BUILDING_BLOCKS, Material.SANDSTONE, 20, 5),
@@ -502,7 +502,7 @@ public enum AdminShopItem {
 		this.material = material;
 	}
 	
-	public static int getBuyPriceByMaterial (Material materia){
+	public static int getBuyPriceByMaterial(Material materia){
 			for(AdminShopItem asi : AdminShopItem.values()){
 				if(asi.getMaterial().equals(materia)){
 					return asi.getPriceBuy();
@@ -511,12 +511,13 @@ public enum AdminShopItem {
 			return 0;
 	}
 	
-	public static int getSellPriceByMaterial (Material materia){
+	public static int getSellPriceByMaterial(Material materia){
 		for(AdminShopItem asi : AdminShopItem.values()){
 			if(asi.getMaterial().equals(materia)){
 				return asi.getPriceSell();
 			}
 		}
 		return 0;
-}
+	}
+	
 }
