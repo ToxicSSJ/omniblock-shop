@@ -15,7 +15,7 @@ import net.omniblock.shop.api.type.ShopType;
 /**
  * 
  * Esta clase abstracta es la base
- * para la creación de los distintos
+ * para la creaciÃ³n de los distintos
  * tipos de tiendas tipo carteles.
  * 
  * @author zlToxicNetherlz

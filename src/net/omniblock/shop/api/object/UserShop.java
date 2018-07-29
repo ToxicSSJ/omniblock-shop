@@ -66,13 +66,13 @@ public class UserShop extends AbstractShop {
 		if(ConfigType.SHOPDATA.getConfig().isSet("usershop." + uniqueID)) {
 			
 			if(!ConfigType.SHOPDATA.getConfig().isSet("usershop." + uniqueID + ".shopItem"))
-				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el shopItem en la configuraci�n.");
+				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el shopItem en la configuración.");
 			
 			if(!ConfigType.SHOPDATA.getConfig().isSet("usershop." + uniqueID + ".actionType"))
-				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el actionType en la configuraci�n.");
+				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el actionType en la configuración.");
 			
 			if(!ConfigType.SHOPDATA.getConfig().isSet("usershop." + uniqueID + ".status"))
-				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el status en la configuraci�n.");
+				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el status en la configuración.");
 			
 			shopItem = ConfigType.SHOPDATA.getConfig().getItemStack("usershop." + uniqueID + ".shopItem");
 			actionType = ShopActionType.valueOf(ConfigType.SHOPDATA.getConfig().getString("usershop." + uniqueID + ".actionType"));
@@ -105,7 +105,7 @@ public class UserShop extends AbstractShop {
 		
 		if(waitlistPlayers.contains(player)) {
 			this.sign.getBlock().breakNaturally();
-			player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes terminar de crear la tienda que estabas haciendo antes de hacer otra.")); 
+			player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes terminar de crear la tienda que estabas haciendo antes de hacer otra."));
 			return ShopLoadStatus.CANNOT_LOAD;
 		}
 		
@@ -116,12 +116,12 @@ public class UserShop extends AbstractShop {
 				
 				if(ShopSignManager.getMaxShopsByRank(player) >= 500) {
 					
-					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cLo sentimos, has alcanzado el limite maximo de tiendas permitidas!")); 
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLo sentimos, has alcanzado el limite maximo de tiendas permitidas!"));
 					return ShopLoadStatus.CANNOT_LOAD;
 					
 				}
 					
-				player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Has alcanzado tu &climite maximo&7 de tiendas, Con un rango &6&lVIP &7podr�s incrementar este limite!")); 
+				player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has alcanzado tu &climite maximo&7 de tiendas, Con un rango &6&lVIP &7podrás incrementar este limite!"));
 				return ShopLoadStatus.CANNOT_LOAD;
 				
 			}
@@ -195,7 +195,7 @@ public class UserShop extends AbstractShop {
 					this.cancel();
 					
 					if(player.isOnline())
-						player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cTu tienda se ha eliminado porque no has colocado el item que usar�as en ella."));
+						player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cTu tienda se ha eliminado porque no has colocado el item que usarías en ella."));
 					
 					waitlistPlayers.remove(player);
 					
@@ -229,17 +229,17 @@ public class UserShop extends AbstractShop {
 				Player player = e.getPlayer();
 				
 				if(player.getItemInHand() == null) {
-					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes tener el item que usar�s en la tienda puesto en tu mano.")); 
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item que usarás en la tienda puesto en tu mano."));
 					return;
 				}
 				
 				if(player.getItemInHand().getType().equals(Material.AIR)) {
-					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes tener el item que usar�s en la tienda puesto en tu mano.")); 
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item que usarás en la tienda puesto en tu mano."));
 					return;
 				}
 
 				if(ItemsProtocol.isMaterialBlocked(player.getItemInHand().getType())) {
-					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cEl item que intentas usar en la tienda est� bloqueado.")); 
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cEl item que intentas usar en la tienda está bloqueado."));
 					return;
 				}
 				
@@ -266,13 +266,13 @@ public class UserShop extends AbstractShop {
 				ConfigType.SHOPDATA.getConfig().set("usershops-amounts." + playerNetworkID, ConfigType.SHOPDATA.getConfig().getInt("usershops-amounts." + playerNetworkID) + 1);
 				ConfigType.SHOPDATA.getConfigObject().save();
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &aHas creado una tienda correctamente!"));
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas creado una tienda correctamente!"));
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
 				return;
 				
 			}
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cLa tienda a la que intentas acceder se encuentra en construcci�n...")); 
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda a la que intentas acceder se encuentra en construcción..."));
 			return;
 			
 		}
@@ -288,7 +288,7 @@ public class UserShop extends AbstractShop {
 			
 			cachePlayer = e.getPlayer();
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7No puedes &cutilizar&7 tus propias tiendas.")); 
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7No puedes &cutilizar&7 tus propias tiendas."));
 			return;
 			
 		}
@@ -305,21 +305,21 @@ public class UserShop extends AbstractShop {
 				
 				if(avaiableAmount == 0 || !chest.getInventory().containsAtLeast(shopItem, purchasableAmount) || purchasablePrice <= 0) {
 					
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7La tienda se ha quedado sin &8stock&7 de este item!"));
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7La tienda se ha quedado sin &8stock&7 de este item!"));
 					return;
 					
 				}
 				
 				if(money < purchasablePrice) {
 					
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Te hacen falta &c$" + (purchasablePrice - money) + " &7para poder comprar &f&lx" + purchasableAmount + " &7" + (purchasableAmount > 1 ? "items" : "item") + " en esta tienda!")); 
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Te hacen falta &c$" + (purchasablePrice - money) + " &7para poder comprar &f&lx" + purchasableAmount + " &7" + (purchasableAmount > 1 ? "items" : "item") + " en esta tienda!"));
 					return;
 				
 				}
 				
 				if(!InventoryUtils.hasSpaceForStack(e.getPlayer().getInventory(), new ItemBuilder(shopItem).amount(purchasableAmount).build())) {
 					
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cNo tienes suficiente espacio para almacenar los items!")); 
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo tienes suficiente espacio para almacenar los items!"));
 					return;
 					
 				}
@@ -332,12 +332,12 @@ public class UserShop extends AbstractShop {
 				e.getPlayer().getInventory().addItem(new ItemBuilder(shopItem).amount(purchasableAmount).build());
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Le has comprado &f&lx" + purchasableAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &a$" + purchasablePrice + " &7a &8" + playerLastName + "&7!"));
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Le has comprado &f&lx" + purchasableAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &a$" + purchasablePrice + " &7a &8" + playerLastName + "&7!"));
 				
 				if(cachePlayer != null)
 					if(cachePlayer.isOnline())
 						if(!AccountBase.getTags(cachePlayer).contains("silentsurvivalshop"))
-							cachePlayer.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &8" + e.getPlayer().getName() + " &7te ha comprado &f&lx" + purchasableAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &a$" + purchasablePrice + "&7!"));
+							cachePlayer.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &8" + e.getPlayer().getName() + " &7te ha comprado &f&lx" + purchasableAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &a$" + purchasablePrice + "&7!"));
 							
 				return;
 				
@@ -347,21 +347,21 @@ public class UserShop extends AbstractShop {
 			
 			if(avaiableAmount == 0 || !chest.getInventory().containsAtLeast(shopItem, 1)) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7La tienda se ha quedado sin &8stock&7 de este item!"));
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7La tienda se ha quedado sin &8stock&7 de este item!"));
 				return;
 				
 			}
 			
 			if(money < purchasablePrice) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Te hacen falta &c$" + (purchasablePrice - money) + " &7para poder comprar &f&lx1 &7item en esta tienda!")); 
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Te hacen falta &c$" + (purchasablePrice - money) + " &7para poder comprar &f&lx1 &7item en esta tienda!"));
 				return;
 			
 			}
 			
 			if(!InventoryUtils.hasSpaceForStack(e.getPlayer().getInventory(), new ItemBuilder(shopItem).amount(1).build())) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cNo tienes suficiente espacio para almacenar los items!")); 
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo tienes suficiente espacio para almacenar los items!"));
 				return;
 				
 			}
@@ -374,12 +374,12 @@ public class UserShop extends AbstractShop {
 			e.getPlayer().getInventory().addItem(new ItemBuilder(shopItem).amount(1).build());
 			e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Le has comprado &f&lx1 &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &a$" + purchasablePrice + " &7a &8" + playerLastName + "&7!"));
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Le has comprado &f&lx1 &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &a$" + purchasablePrice + " &7a &8" + playerLastName + "&7!"));
 			
 			if(cachePlayer != null)
 				if(cachePlayer.isOnline())
 					if(!AccountBase.getTags(cachePlayer).contains("silentsurvivalshop"))
-						cachePlayer.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &8" + e.getPlayer().getName() + " &7te ha comprado &f&lx1" + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &a$" + purchasablePrice + "&7!"));
+						cachePlayer.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &8" + e.getPlayer().getName() + " &7te ha comprado &f&lx1" + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &a$" + purchasablePrice + "&7!"));
 						
 			return;
 			
@@ -395,21 +395,21 @@ public class UserShop extends AbstractShop {
 			
 			if(avaiableAmount == 0 || !e.getPlayer().getInventory().containsAtLeast(shopItem, forSaleAmount) || forSaleAmount <= 0) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
 				return;
 				
 			}
 			
 			if(money < forSalePrice) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7El due�o de la tienda no tiene suficiente dinero para comprarte &f&lx" + forSaleAmount + " &7de ese item!")); 
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7El dueño de la tienda no tiene suficiente dinero para comprarte &f&lx" + forSaleAmount + " &7de ese item!"));
 				return;
 			
 			}
 			
 			if(!InventoryUtils.hasSpaceForStack(chest.getInventory(), new ItemBuilder(shopItem).amount(forSaleAmount).build())) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cLa tienda a la cual le intentas vender el item se encuentra llena!")); 
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda a la cual le intentas vender el item se encuentra llena!"));
 				return;
 				
 			}
@@ -422,12 +422,12 @@ public class UserShop extends AbstractShop {
 			chest.getInventory().addItem(new ItemBuilder(shopItem).amount(forSaleAmount).build());
 			e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Le has vendido &f&lx" + forSaleAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + forSalePrice + " &7a &8" + playerLastName + "&7!"));
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Le has vendido &f&lx" + forSaleAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + forSalePrice + " &7a &8" + playerLastName + "&7!"));
 			
 			if(cachePlayer != null)
 				if(cachePlayer.isOnline())
 					if(!AccountBase.getTags(cachePlayer).contains("silentsurvivalshop"))
-						cachePlayer.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &8" + e.getPlayer().getName() + " &7te ha vendido &f&lx" + forSaleAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + forSalePrice + "&7!"));
+						cachePlayer.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &8" + e.getPlayer().getName() + " &7te ha vendido &f&lx" + forSaleAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + forSalePrice + "&7!"));
 						
 			return;
 			
@@ -437,28 +437,28 @@ public class UserShop extends AbstractShop {
 		
 		if(avaiableAmount == 0 || !e.getPlayer().getInventory().containsAtLeast(shopItem, 1)) {
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
 			return;
 			
 		}
 		
 		if(money < forSalePrice) {
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7El due�o de la tienda no tiene suficiente dinero para comprarte &f&lx1 &7de ese item!")); 
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7El dueño de la tienda no tiene suficiente dinero para comprarte &f&lx1 &7de ese item!"));
 			return;
 		
 		}
 		
 		if(!InventoryUtils.hasSpaceForStack(chest.getInventory(), new ItemBuilder(shopItem).amount(1).build())) {
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cLa tienda a la cual le intentas vender el item se encuentra llena!")); 
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda a la cual le intentas vender el item se encuentra llena!"));
 			return;
 			
 		}
 		
 		if(!InventoryUtils.hasSpaceForStack(chest.getInventory(), new ItemBuilder(shopItem).amount(1).build())) {
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cNo tienes suficiente espacio para almacenar los items!")); 
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo tienes suficiente espacio para almacenar los items!"));
 			return;
 			
 		}
@@ -471,12 +471,12 @@ public class UserShop extends AbstractShop {
 		chest.getInventory().addItem(new ItemBuilder(shopItem).amount(1).build());
 		e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 		
-		e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Le has vendido &f&lx1 &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + forSalePrice + " &7a &8" + playerLastName + "&7!"));
+		e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Le has vendido &f&lx1 &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + forSalePrice + " &7a &8" + playerLastName + "&7!"));
 		
 		if(cachePlayer != null)
 			if(cachePlayer.isOnline())
 				if(!AccountBase.getTags(cachePlayer).contains("silentsurvivalshop"))
-					cachePlayer.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &8" + e.getPlayer().getName() + " &7te ha vendido &f&lx1 &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + forSalePrice + "&7!"));
+					cachePlayer.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &8" + e.getPlayer().getName() + " &7te ha vendido &f&lx1 &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + forSalePrice + "&7!"));
 					
 		return;
 		

@@ -3,7 +3,7 @@ package net.omniblock.shop.api.config.variables;
 /**
  * 
  * Clase para almacenar variables estaticas
- * que no est�n sujetas a nuevos cambios.
+ * que no están sujetas a nuevos cambios.
  * 
  * @author zlToxicNetherlz
  *

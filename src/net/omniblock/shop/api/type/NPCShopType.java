@@ -27,7 +27,7 @@ public enum NPCShopType {
 				@Override
 				public void clickEvent(NPC npc, Player player) {
 				
-					InventoryShop shop = InventoryShop.lookupShop(KindItem.FOODSTUFFS, NPCShopType.SHOP_FOOD.getName(), "&8�Busca algo en particular?");
+					InventoryShop shop = InventoryShop.lookupShop(KindItem.FOODSTUFFS, NPCShopType.SHOP_FOOD.getName(), "&8¿Busca algo en particular?");
 					shop.openShop(player);
 					
 					return;
@@ -103,15 +103,15 @@ public enum NPCShopType {
 	 * @param name
 	 *            Nombre que tendra el NPC.
 	 * @param professionName
-	 *            Nombre de la profesi�n que tendr� el NPC.
+	 *            Nombre de la profesión que tendrá el NPC.
 	 * @param skin
 	 *            Nombre de la skin que se va a utilizar.
 	 * @param npcDialogs
 	 *            Dialogos de los NPCs.
 	 * @param material
-	 *            Material que representa su profesi�n.
+	 *            Material que representa su profesión.
 	 * @param action
-	 *            Acci�n que se realizara al hundir click al NPC.
+	 *            Acción que se realizara al hundir click al NPC.
 	 * 
 	 */
 	NPCShopType(String name, String professionName, String skin, String[] npcDialogs, Material material,

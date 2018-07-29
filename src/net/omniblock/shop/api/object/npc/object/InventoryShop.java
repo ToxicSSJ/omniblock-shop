@@ -38,8 +38,8 @@ public class InventoryShop {
 	private static final String[] itemLore = 
 			
 			new String[] {
-			TextUtil.format("&8- &7Es una gran elecci�n,"),
-			TextUtil.format("&7adem�s; lo tengo"),
+			TextUtil.format("&8- &7Es una gran elección,"),
+			TextUtil.format("&7además; lo tengo"),
 			TextUtil.format("&7al mejor precio.")};
 
 	/**
@@ -47,8 +47,8 @@ public class InventoryShop {
 	 * 
 	 * @param npcName
 	 *            El nombre que tiene el NPC.
-	 * @param player
-	 *            El jugador que abri� el inventario.
+	 * @param kind
+	 *            Tipo de item.
 	 * @param inventoryName
 	 *            Nombre del inventario.
 	 * 
@@ -112,7 +112,7 @@ public class InventoryShop {
 	}
 
 	/**
-	 * Sistema de compra de �tems del NPC.
+	 * Sistema de compra de ítems del NPC.
 	 * 
 	 */
 	public void openShop(Player player) {
@@ -124,10 +124,10 @@ public class InventoryShop {
 
 
 	/**
-	 * Hacer la venta y compra de alg�n item.
+	 * Hacer la venta y compra de algún item.
 	 * 
 	 * @param item Tipo de item seleccionado.
-	 * @param player Jugador que interact�a con la GUI. 
+	 * @param player Jugador que interactúa con la GUI.
 	 * @param priceBuy Precio de compra del ITEM.
 	 * @param priceSell Precio de venta del ITEM.
 	 * @param click Tipo de click que se ejecuto en la GUI.
@@ -152,14 +152,14 @@ public class InventoryShop {
 			if(money < priceBuy) {
 				
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
-				player.sendMessage(TextUtil.format(this.npcName + "&b&l� &7Te hacen falta &c$" + (priceBuy - money) + " &7para poder comprar &f&l" + itemShop + " &7 en esta tienda!")); 
+				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Te hacen falta &c$" + (priceBuy - money) + " &7para poder comprar &f&l" + itemShop + " &7 en esta tienda!"));
 				return;
 			
 			}
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build());
-			player.sendMessage(TextUtil.format(this.npcName + "&b&l� &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy + "."));
+			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy + "."));
 
 			SurvivalBankBase.removeMoney(player, priceBuy);
 			return;
@@ -174,14 +174,14 @@ public class InventoryShop {
 			if(money < priceMaxAmount) {
 
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
-				player.sendMessage(TextUtil.format(this.npcName + "&b&l� &7Te hacen falta &c$" + (priceMaxAmount - money) + " &7para poder comprar &f&l" + itemShop + " &7 en esta tienda!"));
+				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Te hacen falta &c$" + (priceMaxAmount - money) + " &7para poder comprar &f&l" + itemShop + " &7 en esta tienda!"));
 				return;
 
 			}
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(maxStackSpace).data(item.getData()).build());
-			player.sendMessage(TextUtil.format(this.npcName + "&b&l� &7Has comprado &f&lx" +  maxStackSpace  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
+			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" +  maxStackSpace  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
 			SurvivalBankBase.removeMoney(player, priceMaxAmount);
 			
 			return;
@@ -193,14 +193,14 @@ public class InventoryShop {
 			if(avaiableAmount - 1 <= 0) {
 				
 				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 2, 2);
-				player.sendMessage(TextUtil.format(this.npcName + "&b&l� &cNo tienes " + ItemNameUtils.getMaterialName(item.getMaterial()) + "&c en el inventario.")); 
+				player.sendMessage(TextUtil.format(this.npcName + "&b&l» &cNo tienes " + ItemNameUtils.getMaterialName(item.getMaterial()) + "&c en el inventario."));
 				return;
 			
 			}
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), sellAmount);
-			player.sendMessage(TextUtil.format(this.npcName + "&b&l� &7Has vendido "  + "&8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceSell + "!"));
+			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has vendido "  + "&8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceSell + "!"));
 			SurvivalBankBase.addMoney(player, priceSell);
 			return;
 		}
@@ -214,7 +214,7 @@ public class InventoryShop {
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
 			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), amount);
-			player.sendMessage(TextUtil.format(this.npcName + " &b&l� &7Has vendido &f&lx" + amount  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + sellItem + "!"));
+			player.sendMessage(TextUtil.format(this.npcName + " &b&l» &7Has vendido &f&lx" + amount  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + sellItem + "!"));
 			SurvivalBankBase.addMoney(player, sellItem);
 			return;
 		}
@@ -234,11 +234,11 @@ public class InventoryShop {
 	
 	/**
 	 * 
-	 * Este metodo buscar� una tienda registrada
+	 * Este metodo buscará una tienda registrada
 	 * con las caracteristicas dadas, en caso
 	 * de que no se logre encontrar dicha tienda
-	 * simplemente se crear� una nueva y posteriormente
-	 * se registrar� para futuras busquedas.
+	 * simplemente se creará una nueva y posteriormente
+	 * se registrará para futuras busquedas.
 	 * 
 	 * @param kind Tipo de tienda.
 	 * @param npcname El nombre del npc que atienda

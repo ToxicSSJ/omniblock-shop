@@ -21,13 +21,13 @@ public class EntityUtils {
 
 	/**
 	 * 
-	 * Verificar si un jugador est· observando
+	 * Verificar si un jugador est√° observando
 	 * una entidad.
 	 * 
 	 * @param player El jugador que observa.
 	 * @param entity La entidad que es observada.
 	 * @return <strong>true</strong> en caso de que
-	 * el jugador sÌ estÈ observando la entidad.
+	 * el jugador s√≠ est√° observando la entidad.
 	 */
 	public static boolean isLookingAtEntity(Player player, LivingEntity entity) {
 
@@ -48,11 +48,11 @@ public class EntityUtils {
 	/**
 	 * 
 	 * Con este metodo se puede obtener el
-	 * bloque que est· viendo el usuario en base
+	 * bloque que est√° viendo el usuario en base
 	 * a una distancia definida.
 	 * 
 	 * @param player El jugador.
-	 * @return El bloque que el jugador est· viendo
+	 * @return El bloque que el jugador est√° viendo
 	 * a esa distancia.
 	 */
 	public static Block getBlockAtLooking(Player player, int distance) {

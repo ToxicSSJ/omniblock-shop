@@ -91,7 +91,7 @@ public class AdminShop extends AbstractShop {
 		sign.setLine(2, TextUtil.format("tipo de item que"));
 		sign.setLine(3, TextUtil.format("negociaras."));
 		
-		player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Ahora debes hacer click derecho con el item que usar�s en la tienda."));
+		player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Ahora debes hacer click derecho con el item que usarás en la tienda."));
 		
 		new BukkitRunnable() {
 			
@@ -123,7 +123,7 @@ public class AdminShop extends AbstractShop {
 					this.cancel();
 					
 					if(player.isOnline())
-						player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cTu tienda se ha eliminado porque no has colocado el item que usar�as en ella."));
+						player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cTu tienda se ha eliminado porque no has colocado el item que usaráas en ella."));
 					
 					waitlistPlayers.remove(player);
 					
@@ -153,12 +153,12 @@ public class AdminShop extends AbstractShop {
 				Player player = e.getPlayer();
 				
 				if(player.getItemInHand().getType().equals(Material.AIR)) {
-					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes tener el item que usar�s en la tienda puesto en tu mano.")); 
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item que usarás en la tienda puesto en tu mano."));
 					return;
 				}
 				
 				if(ItemsProtocol.isMaterialBlocked(player.getItemInHand().getType())) {
-					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cEl item que intentas usar en la tienda est� bloqueado.")); 
+					player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cEl item que intentas usar en la tienda está bloqueado."));
 					return;
 				}
 				
@@ -185,13 +185,13 @@ public class AdminShop extends AbstractShop {
 				
 				waitlistPlayers.remove(e.getPlayer());
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &aHas creado una tienda correctamente!"));
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &aHas creado una tienda correctamente!"));
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 10);
 				return;
 				
 			}
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cLa tienda a la que intentas acceder se encuentra en construcci�n...")); 
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cLa tienda a la que intentas acceder se encuentra en construcción..."));
 			return;
 			
 		}
@@ -210,14 +210,14 @@ public class AdminShop extends AbstractShop {
 				
 				if(money < buyPrice) {
 					
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Te hacen falta &c$" + (buyPrice - money) + " &7para poder comprar &f&lx" + maxStackSpace + " &7" + (maxStackSpace > 1 ? "items" : "item") + " en esta tienda!")); 
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Te hacen falta &c$" + (buyPrice - money) + " &7para poder comprar &f&lx" + maxStackSpace + " &7" + (maxStackSpace > 1 ? "items" : "item") + " en esta tienda!"));
 					return;
 				
 				}
 				
 				if(!InventoryUtils.hasSpaceForStack(e.getPlayer().getInventory(), new ItemBuilder(shopItem).amount(maxStackSpace).build())) {
 					
-					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cNo tienes suficiente espacio para almacenar los items!")); 
+					e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo tienes suficiente espacio para almacenar los items!"));
 					return;
 					
 				}
@@ -227,21 +227,21 @@ public class AdminShop extends AbstractShop {
 				e.getPlayer().getInventory().addItem(new ItemBuilder(shopItem).amount(maxStackSpace).build());
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Has comprado &f&lx" + maxStackSpace + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()) + " &7por &a$" + buyPrice + "."));
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has comprado &f&lx" + maxStackSpace + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()) + " &7por &a$" + buyPrice + "."));
 				return;
 				
 			}
 			
 			if(money < buyPrice) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Te hacen falta &c$" + (buyPrice - money) + " &7para poder comprar &f&lx" + shopItem.getMaxStackSize() + " &7" + (shopItem.getMaxStackSize() > 1 ? "items" : "item") + " en esta tienda!")); 
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Te hacen falta &c$" + (buyPrice - money) + " &7para poder comprar &f&lx" + shopItem.getMaxStackSize() + " &7" + (shopItem.getMaxStackSize() > 1 ? "items" : "item") + " en esta tienda!"));
 				return;
 			
 			}
 			
 			if(!InventoryUtils.hasSpaceForStack(e.getPlayer().getInventory(), new ItemBuilder(shopItem).amount(1).build())) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cNo tienes suficiente espacio para almacenar los items!")); 
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cNo tienes suficiente espacio para almacenar los items!"));
 				return;
 				
 			}
@@ -251,7 +251,7 @@ public class AdminShop extends AbstractShop {
 			e.getPlayer().getInventory().addItem(new ItemBuilder(shopItem).amount(1).build());
 			e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Has comprado &f&lx1" + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()) + " &7por &a$" + buyPrice + "."));
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has comprado &f&lx1" + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()) + " &7por &a$" + buyPrice + "."));
 			return;
 			
 		}
@@ -270,7 +270,7 @@ public class AdminShop extends AbstractShop {
 			
 			if(avaiableAmount == 0) {
 				
-				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
+				e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
 				return;
 				
 			}
@@ -280,7 +280,7 @@ public class AdminShop extends AbstractShop {
 			
 			e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Has vendido &f&lx" + sellAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + sellPrice + "!"));
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has vendido &f&lx" + sellAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + sellPrice + "!"));
 			return;
 			
 		}
@@ -289,7 +289,7 @@ public class AdminShop extends AbstractShop {
 		
 		if(avaiableAmount == 0) {
 			
-			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
+			e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes tener el item de la tienda en tu inventario para poder venderlo!"));
 			return;
 			
 		}
@@ -299,7 +299,7 @@ public class AdminShop extends AbstractShop {
 		
 		e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
 		
-		e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &7Has vendido &f&lx" + sellAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + sellPrice + "!"));
+		e.getPlayer().sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &7Has vendido &f&lx" + sellAmount + " &7de &8" + ItemNameUtils.getMaterialName(shopItem.getType()).firstAllUpperCased() + " &7al precio de &9$" + sellPrice + "!"));
 		return;
 		
 	}
@@ -311,13 +311,13 @@ public class AdminShop extends AbstractShop {
 		if(ConfigType.SHOPDATA.getConfig().isSet("adminshop." + uniqueID)) {
 			
 			if(!ConfigType.SHOPDATA.getConfig().isSet("adminshop." + uniqueID + ".shopItem"))
-				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el shopItem en la configuraci�n.");
+				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el shopItem en la configuración.");
 			
 			if(!ConfigType.SHOPDATA.getConfig().isSet("adminshop." + uniqueID + ".actionType"))
-				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el actionType en la configuraci�n.");
+				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el actionType en la configuración.");
 			
 			if(!ConfigType.SHOPDATA.getConfig().isSet("adminshop." + uniqueID + ".status"))
-				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el status en la configuraci�n.");
+				throw new SignLoadException("No se ha podido cargar el cartel '" + uniqueID + "' porque hace falta el status en la configuración.");
 			
 			shopItem = ConfigType.SHOPDATA.getConfig().getItemStack("adminshop." + uniqueID + ".shopItem");
 			actionType = ShopActionType.valueOf(ConfigType.SHOPDATA.getConfig().getString("adminshop." + uniqueID + ".actionType"));
@@ -356,7 +356,7 @@ public class AdminShop extends AbstractShop {
 		
 		if(waitlistPlayers.contains(player)) {
 			this.sign.getBlock().breakNaturally();
-			player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l� &cDebes terminar de crear la tienda que estabas haciendo antes de hacer otra.")); 
+			player.sendMessage(TextUtil.format("&8&lT&8iendas &b&l» &cDebes terminar de crear la tienda que estabas haciendo antes de hacer otra."));
 			return ShopLoadStatus.CANNOT_LOAD;
 		}
 		
