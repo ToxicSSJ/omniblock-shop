@@ -10,12 +10,12 @@ public class ItemsProtocol {
 	protected static List<Material> blockedMaterials = Arrays.asList(
 			Material.AIR,
 			Material.BEDROCK,
-			Material.MOB_SPAWNER,
+			Material.SPAWNER,
 			Material.BARRIER,
-			Material.COMMAND,
-			Material.COMMAND_CHAIN,
-			Material.COMMAND_MINECART,
-			Material.COMMAND_REPEATING);
+			Material.COMMAND_BLOCK,
+			Material.CHAIN_COMMAND_BLOCK,
+			Material.COMMAND_BLOCK_MINECART,
+			Material.REPEATING_COMMAND_BLOCK);
 	
 	public static boolean isMaterialBlocked(Material material) {
 		return blockedMaterials.contains(material);

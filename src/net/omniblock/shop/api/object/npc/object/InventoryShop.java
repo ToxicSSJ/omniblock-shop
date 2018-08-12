@@ -82,7 +82,7 @@ public class InventoryShop {
 				
 			}
 			
-			cacheBuilder.addItem(new ItemBuilder(item.getMaterial()).data(item.getData()).amount(1)
+			cacheBuilder.addItem(new ItemBuilder(item.getMaterial()).amount(1)
 					.lore("")
 					.lore(itemLore)
 					.lore("")
@@ -135,7 +135,7 @@ public class InventoryShop {
 	 * */
 	private void makeSale(AdminShopItem item, Player player, int priceBuy, int priceSell, ClickType click) {
 		
-		ItemStack  itemShop = new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build();
+		ItemStack  itemShop = new ItemBuilder(item.getMaterial()).amount(1).build();
 		
 		int maxStackSpace = InventoryUtils.getMaxStackSpaceQuantity(player.getInventory(), itemShop);
 		int avaiableAmount = InventoryUtils.countMatches(player.getInventory(), itemShop) + 1;
@@ -157,8 +157,8 @@ public class InventoryShop {
 			
 			}
 			
-			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
-			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build());
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 2, 2);
+			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(1).build());
 			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" + avaiableAmount + " &7de &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7por &a$" + priceBuy + "."));
 
 			SurvivalBankBase.removeMoney(player, priceBuy);
@@ -179,8 +179,8 @@ public class InventoryShop {
 
 			}
 			
-			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
-			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(maxStackSpace).data(item.getData()).build());
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 2, 2);
+			player.getInventory().addItem(new ItemBuilder(item.getMaterial()).amount(maxStackSpace).build());
 			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has comprado &f&lx" +  maxStackSpace  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceMaxAmount + "!"));
 			SurvivalBankBase.removeMoney(player, priceMaxAmount);
 			
@@ -198,8 +198,8 @@ public class InventoryShop {
 			
 			}
 			
-			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
-			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), sellAmount);
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 2, 2);
+			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).build(), sellAmount);
 			player.sendMessage(TextUtil.format(this.npcName + "&b&l» &7Has vendido "  + "&8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + priceSell + "!"));
 			SurvivalBankBase.addMoney(player, priceSell);
 			return;
@@ -212,8 +212,8 @@ public class InventoryShop {
 			
 			if(amount <= 0) return;
 			
-			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADING, 2, 2);
-			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).data(item.getData()).build(), amount);
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 2, 2);
+			InventoryUtils.removeQuantity(player.getInventory(), new ItemBuilder(item.getMaterial()).amount(1).build(), amount);
 			player.sendMessage(TextUtil.format(this.npcName + " &b&l» &7Has vendido &f&lx" + amount  + " &8" + ItemNameUtils.getMaterialName(item.getMaterial()) + " &7al precio de &9$" + sellItem + "!"));
 			SurvivalBankBase.addMoney(player, sellItem);
 			return;

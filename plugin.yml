@@ -3,6 +3,7 @@ main: net.omniblock.shop.ShopPlugin
 softdepend: [OmniNetwork, HolographicDisplays, Survival, Citizens]
 version: 2.5.7
 website: www.omniblock.net
+api-version: 1.13
 commands:
    shopnpc:
       description: Comando principal para el manejo de los npcs de las tiendas.

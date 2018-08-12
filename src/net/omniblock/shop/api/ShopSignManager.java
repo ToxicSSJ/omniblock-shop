@@ -399,8 +399,8 @@ public class ShopSignManager {
 			//Evitar que el cartel sea destruido por una espada en creativo
 			//
 			if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE) 
-					&& (e.getPlayer().getItemInHand().getType().equals(Material.WOOD_SWORD) 
-							|| e.getPlayer().getItemInHand().getType().equals(Material.GOLD_SWORD)
+					&& (e.getPlayer().getItemInHand().getType().equals(Material.WOODEN_SWORD)
+							|| e.getPlayer().getItemInHand().getType().equals(Material.GOLDEN_SWORD)
 							|| e.getPlayer().getItemInHand().getType().equals(Material.IRON_SWORD)
 							|| e.getPlayer().getItemInHand().getType().equals(Material.STONE_SWORD)
 							|| e.getPlayer().getItemInHand().getType().equals(Material.DIAMOND_SWORD))) return;
@@ -411,7 +411,6 @@ public class ShopSignManager {
 			// componente de una tienda.
 			//
 			if(		e.getBlock().getType() == Material.SIGN ||
-					e.getBlock().getType() == Material.SIGN_POST ||
 					e.getBlock().getType() == Material.WALL_SIGN ||
 					e.getBlock().getType() == Material.CHEST ||
 					e.getBlock().getType() == Material.TRAPPED_CHEST) {
